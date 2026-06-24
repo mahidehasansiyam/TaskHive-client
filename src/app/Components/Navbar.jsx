@@ -4,38 +4,48 @@ import React, { useState } from 'react';
 import { Button } from '@heroui/react';
 import Link from 'next/link';
 import { authClient } from '@/lib/auth-client';
+import { ProfileDropdown } from './ProfileDropdown';
+import { PiSignOutFill } from 'react-icons/pi';
+import { ArrowRightFromSquare } from '@gravity-ui/icons';
+import { useRouter } from 'next/navigation';
 
 export default function CustomNavbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const {
-    data: session,
-    isPending,
-    
-  } = authClient.useSession();
-  console.log(session.user,isPending);
+  const router = useRouter();
 
-  // Links as defined in the platform guidelines
+  const { data: session, isPending } = authClient.useSession();
+
+  const handleSignout = async () => {
+    setIsOpen(false);
+    await authClient.signOut();
+  };
+
+  const handleDashboardRedirect = () => {
+    setIsOpen(false);
+    const userRole = session?.user?.role || 'client';
+    if (userRole === 'freelancer') {
+      router.push('/dashboard/freelancer');
+    } else {
+      router.push('/dashboard/recruiter');
+    }
+  };
+
   const navLinks = [
-    {
-      label: 'Home',
-      href: '/',
-      active: true, // Highlights the home button as seen in the mockup
-    },
-    {
-      label: 'Browse Tasks',
-      href: '/browse-tasks',
-      active: false,
-    },
-    {
-      label: 'Browse Freelancers',
-      href: '/browse-freelancers',
-      active: false,
-    },
+    { label: 'Home', href: '/', active: true },
+    { label: 'Browse Tasks', href: '/browse-tasks', active: false },
+    { label: 'Browse Freelancers', href: '/browse-freelancers', active: false },
   ];
 
+  if (isPending) {
+    return (
+      <div className="w-full h-20 bg-white border border-gray-100 rounded-2xl flex items-center justify-center text-sm text-gray-400">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <header className="w-full bg-white backdrop-blur-md sticky top-0 z-50 transition-all">
-      {/* Container matching full-width layout parameters */}
+    <header className="w-full bg-white backdrop-blur-md sticky top-0 z-50 transition-all border-b border-gray-100">
       <div className="w-full max-w-[1440px] mx-auto h-20 px-6 sm:px-12 flex items-center justify-between">
         {/* Left: Brand logo section */}
         <Link
@@ -80,22 +90,38 @@ export default function CustomNavbar() {
           ))}
         </ul>
 
-        {/* Right: Actions View incorporating requested button gradient */}
+        {/* Right: Desktop Actions View */}
         <div className="hidden md:flex items-center gap-8">
-          <Link
-            href="/auth/login"
-            className="text-[#555] hover:text-[#f59e0b] text-[14px] font-semibold transition-colors no-underline"
-          >
-            Sign In
-          </Link>
-          <Link href="/login">
-            <Button
-              radius="md"
-              className="bg-gradient-to-r from-[#f39c12] to-[#e67e22] hover:from-[#e67e22] hover:to-[#d35400] text-white font-bold px-6 h-11 text-[14px] shadow-sm shadow-amber-500/20 transition-all border-none rounded-2xl"
-            >
-              Get Started
-            </Button>
-          </Link>
+          {session ? (
+            <div className="flex items-center gap-4 justify-center">
+              <ProfileDropdown session={session} />
+              <Button
+                isIconOnly
+                onClick={handleSignout}
+                variant="light"
+                className="text-gray-500 hover:text-red-600 min-w-0 p-2 rounded-xl"
+              >
+                <ArrowRightFromSquare className="size-5" />
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-6">
+              <Link
+                href="/auth/login"
+                className="text-[#555] hover:text-[#f59e0b] text-[14px] font-semibold transition-colors no-underline"
+              >
+                Sign In
+              </Link>
+              <Link href="/login">
+                <Button
+                  radius="md"
+                  className="bg-gradient-to-r from-[#f39c12] to-[#e67e22] hover:from-[#e67e22] hover:to-[#d35400] text-white font-bold px-6 h-11 text-[14px] shadow-sm shadow-amber-500/20 transition-all border-none rounded-2xl"
+                >
+                  Get Started
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Mobile menu trigger toggle */}
@@ -138,16 +164,19 @@ export default function CustomNavbar() {
         </div>
       </div>
 
-      {/* Mobile responsive Dropdown overlay */}
+      {/* Mobile responsive Dropdown overlay matches 1000004674.jpg layout */}
       {isOpen && (
-        <div className="absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-gray-100 p-6 shadow-xl z-[999] flex flex-col gap-5 md:hidden animate-in fade-in slide-in-from-top-2 duration-150">
-          <ul className="flex flex-col gap-4 list-none m-0 p-0">
+        <div className="absolute top-20 left-0 right-0 bg-white border-b border-gray-100 p-6 shadow-2xl z-[999] flex flex-col justify-between h-[calc(100vh-80px)] md:hidden animate-in fade-in slide-in-from-top-2 duration-150">
+          {/* Top Section: Navigation Links */}
+          <ul className="flex flex-col gap-4 list-none m-0 p-0 w-full">
             {navLinks.map(link => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className={`text-base font-semibold block py-1 no-underline ${
-                    link.active ? 'text-[#f59e0b]' : 'text-gray-600'
+                  className={`text-base font-bold block py-2.5 px-4 rounded-xl no-underline transition-all ${
+                    link.active
+                      ? 'bg-amber-50 text-[#f59e0b]'
+                      : 'text-gray-600 hover:bg-gray-50'
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -156,27 +185,74 @@ export default function CustomNavbar() {
               </li>
             ))}
           </ul>
-          <hr className="border-gray-100 my-0" />
-          <div className="flex flex-col gap-3 w-full">
-            <Link
-              href="/login"
-              className="text-gray-600 text-[15px] font-semibold transition-colors no-underline text-center py-2"
-              onClick={() => setIsOpen(false)}
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/login"
-              className="w-full"
-              onClick={() => setIsOpen(false)}
-            >
-              <Button
-                radius="md"
-                className="w-full bg-gradient-to-r from-[#f39c12] to-[#e67e22] text-white font-bold h-11 text-[15px] border-none"
-              >
-                Get Started
-              </Button>
-            </Link>
+
+          {/* Bottom Section: Auth / Profile Placement */}
+          <div className="w-full mt-auto pt-6 border-t border-gray-100">
+            {session ? (
+              <div className="flex items-center justify-between w-full bg-gray-50/50 p-3 rounded-2xl border border-gray-100">
+                {/* Clickable Profile Detail Block */}
+                <div
+                  onClick={handleDashboardRedirect}
+                  className="flex items-center gap-3 cursor-pointer flex-1 min-w-0 group"
+                >
+                  <div className="w-11 h-11 rounded-full bg-amber-100 flex items-center justify-center overflow-hidden shrink-0 border border-amber-200">
+                    {session?.user?.image ? (
+                      <img
+                        src={session.user.image}
+                        alt="User"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-amber-800 font-bold text-sm">
+                        {session?.user?.name?.charAt(0).toUpperCase() || 'U'}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-sm font-bold  truncate text-amber-600 transition-colors">
+                      {session?.user?.name || 'User'}
+                    </span>
+                    {session?.user?.role && (
+                      <span className="w-max inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800 border border-amber-100 capitalize mt-0.5">
+                        {session?.user?.role}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Immediate Logout Action Hook */}
+                <Button
+                  isIconOnly
+                  onClick={handleSignout}
+                  variant="light"
+                  className="text-gray-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-xl min-w-0 shrink-0"
+                >
+                  <ArrowRightFromSquare className="size-5" />
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 w-full">
+                <Link
+                  href="/auth/login"
+                  className="text-gray-600 text-[15px] font-bold transition-colors no-underline text-center py-2.5 rounded-xl hover:bg-gray-50"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/login"
+                  className="w-full no-underline"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Button
+                    radius="md"
+                    className="w-full bg-gradient-to-r from-[#f39c12] to-[#e67e22] text-white font-bold h-11 text-[15px] border-none rounded-xl"
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
