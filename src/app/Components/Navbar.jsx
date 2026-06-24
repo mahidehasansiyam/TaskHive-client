@@ -12,7 +12,7 @@ export default function CustomNavbar() {
     isPending,
     
   } = authClient.useSession();
-  console.log(session,isPending);
+  console.log(session.user,isPending);
 
   // Links as defined in the platform guidelines
   const navLinks = [

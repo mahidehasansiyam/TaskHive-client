@@ -10,6 +10,7 @@ import {
   Button,
 } from '@heroui/react';
 import Link from 'next/link';
+import { authClient } from '@/lib/auth-client';
 
 export default function LoginPage() {
   // Handlers for social authentication providers
@@ -17,13 +18,20 @@ export default function LoginPage() {
     alert('Initiating secure Google OAuth single-sign-on workflow...');
   };
 
-  const onSubmit = e => {
+  const onSubmit =async e => {
     e.preventDefault();
     const formData = Object.fromEntries(
       new FormData(e.currentTarget).entries(),
     );
-    const data = formData;
-    console.log(data);
+    
+    
+
+    const { data, error } = await authClient.signIn.email({
+        email: formData.email,
+        password: formData.password,
+        rememberMe: true,
+    });
+    console.log("data",data, "error",error);
   };
 
   return (
