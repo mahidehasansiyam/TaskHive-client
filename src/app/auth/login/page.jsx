@@ -9,6 +9,7 @@ import {
   FieldError,
   Button,
 } from '@heroui/react';
+import Link from 'next/link';
 
 export default function LoginPage() {
   // Handlers for social authentication providers
@@ -158,12 +159,12 @@ export default function LoginPage() {
         </Form>
 
         {/* Alternative Page Redirect Navigation Trigger Link */}
-        <p className="text-gray-400 font-medium text-sm text-center mt-6">
+        <Link href="/auth/register" className="text-gray-400 font-medium text-sm text-center mt-6">
           Don&apos;t have an account?{' '}
           <span className="text-[#f59e0b] font-bold cursor-pointer hover:underline">
             Sign up
           </span>
-        </p>
+        </Link>
       </div>
     </div>
   );

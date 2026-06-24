@@ -3,9 +3,16 @@
 import React, { useState } from 'react';
 import { Button } from '@heroui/react';
 import Link from 'next/link';
+import { authClient } from '@/lib/auth-client';
 
 export default function CustomNavbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const {
+    data: session,
+    isPending,
+    
+  } = authClient.useSession();
+  console.log(session,isPending);
 
   // Links as defined in the platform guidelines
   const navLinks = [
@@ -76,7 +83,7 @@ export default function CustomNavbar() {
         {/* Right: Actions View incorporating requested button gradient */}
         <div className="hidden md:flex items-center gap-8">
           <Link
-            href="/login"
+            href="/auth/login"
             className="text-[#555] hover:text-[#f59e0b] text-[14px] font-semibold transition-colors no-underline"
           >
             Sign In

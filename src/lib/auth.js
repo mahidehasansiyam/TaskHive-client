@@ -21,8 +21,25 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       role: {
-        default: 'client',
-      }
+        type: 'string',
+        required: true,
+        defaultValue: 'client',
+      },
+      skills: {
+        type: 'string[]', // Tells BetterAuth it's an array of strings
+        required: false,
+        defaultValue: [],
+      },
+      bio: {
+        type: 'string',
+        required: false,
+        defaultValue: '',
+      },
+      hourlyRate: {
+        type: 'number',
+        required: false,
+        defaultValue: 0,
+      },
     },
   },
 });

@@ -10,36 +10,76 @@ import {
   Button,
 } from '@heroui/react';
 import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
+  const router = useRouter();
   // Setup local role selection state ('client' | 'freelancer') matching your mockup views
   const [role, setRole] = useState('client');
+  const [loading, setLoading] = useState(false);
 
   // Google OAuth rule: Any signups through Google default automatically to Client role
-  const handleGoogleLogin = () => {
-    
+  const handleGoogleLogin = async () => {
+    try {
+      await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: '/',
+        // Pass the role metadata over to your session if configured in your schema
+        newUserRole: 'client',
+      });
+    } catch (err) {
+      console.error('Google Sign Up Error:', err);
+    }
   };
 
-  const onSubmit =async e => {
+  const onSubmit = async e => {
     e.preventDefault();
+    if (loading) return;
+
     const formData = Object.fromEntries(
       new FormData(e.currentTarget).entries(),
     );
-    
-    console.log(formData);
 
-    // Explicitly append the manually selected form role configuration
-    formData['role'] = role;
+    // Conditionally map freelancer-specific form fields to match database schemas
+    let customSkills = [];
+    let customBio = '';
+    let customHourlyRate = 0;
 
+    if (role === 'freelancer') {
+      customSkills = formData.skills
+        ? formData.skills
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean)
+        : [];
+      customBio = formData.bio || '';
+      customHourlyRate = formData.hourlyRate ? Number(formData.hourlyRate) : 0;
+    }
+
+    setLoading(true);
+
+    // Call BetterAuth client handler passing standard profile fields along with optional custom metadata keys
     const { data, error } = await authClient.signUp.email({
       name: formData.name,
       email: formData.email,
       password: formData.password,
-      image: formData.imageUrl,
+      image: formData.imageUrl || '', // Safe mapping fallback for non-required image URL
+      role: role,
+      skills: customSkills,
+      bio: customBio,
+      hourlyRate: customHourlyRate,
       callbackURL: '/',
     });
-    console.log("data",data);
-    console.log("error",error);
+
+    setLoading(false);
+
+    if (error) {
+      console.error('Registration Error:', error);
+      alert(error.message || 'An error occurred during registration.');
+    } else {
+      console.log('Registration Successful Data:', data);
+      router.push('/');
+    }
   };
 
   return (
@@ -344,29 +384,35 @@ export default function RegisterPage() {
           {/* Submission Main Call-To-Action Primary Trigger */}
           <Button
             type="submit"
-            className="w-full h-12 bg-gradient-to-r from-[#f59e0b] to-[#ea580c] hover:from-[#ea580c] hover:to-[#d97706] text-white font-bold text-[15px] rounded-xl flex items-center justify-center gap-2 shadow-md shadow-orange-500/20 border-none outline-none mt-2 transition-all group"
+            disabled={loading}
+            className={`w-full h-12 bg-gradient-to-r from-[#f59e0b] to-[#ea580c] hover:from-[#ea580c] hover:to-[#d97706] text-white font-bold text-[15px] rounded-xl flex items-center justify-center gap-2 shadow-md shadow-orange-500/20 border-none outline-none mt-2 transition-all group ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            <span>Create Account</span>
-            <svg
-              className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
+            <span>{loading ? 'Creating Account...' : 'Create Account'}</span>
+            {!loading && (
+              <svg
+                className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            )}
           </Button>
         </Form>
 
         {/* Bottom Navigation Link */}
         <p className="text-gray-400 font-medium text-sm text-center mt-6">
           Already have an account?{' '}
-          <span className="text-[#f59e0b] font-bold cursor-pointer hover:underline">
+          <span
+            onClick={() => router.push('/login')}
+            className="text-[#f59e0b] font-bold cursor-pointer hover:underline"
+          >
             Sign in
           </span>
         </p>
