@@ -8,12 +8,16 @@ import { ProfileDropdown } from './ProfileDropdown';
 import { PiSignOutFill } from 'react-icons/pi';
 import { ArrowRightFromSquare } from '@gravity-ui/icons';
 import { useRouter } from 'next/navigation';
+import { CiGrid42 } from 'react-icons/ci';
 
-export default function CustomNavbar() {
+
+export default  function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   const { data: session, isPending } = authClient.useSession();
+  // console.log(session);
+  
 
   const handleSignout = async () => {
     setIsOpen(false);
@@ -32,17 +36,17 @@ export default function CustomNavbar() {
 
   const navLinks = [
     { label: 'Home', href: '/', active: true },
-    { label: 'Browse Tasks', href: '/browse-tasks', active: false },
-    { label: 'Browse Freelancers', href: '/browse-freelancers', active: false },
+    { label: 'Browse Tasks', href: '/tasks', active: false },
+    { label: 'Browse Freelancers', href: '/freelancers', active: false },
   ];
 
-  if (isPending) {
-    return (
-      <div className="w-full h-20 bg-white border border-gray-100 rounded-2xl flex items-center justify-center text-sm text-gray-400">
-        Loading...
-      </div>
-    );
-  }
+  // if (isPending) {
+  //   return (
+  //     <div className="w-full h-20 bg-white border border-gray-100 rounded-2xl flex items-center justify-center text-sm text-gray-400">
+  //       Loading...
+  //     </div>
+  //   );
+  // }
 
   return (
     <header className="w-full bg-white backdrop-blur-md sticky top-0 z-50 transition-all border-b border-gray-100">
@@ -94,6 +98,15 @@ export default function CustomNavbar() {
         <div className="hidden md:flex items-center gap-8">
           {session ? (
             <div className="flex items-center gap-4 justify-center">
+              <div>
+                <Link
+                  href={`/dashboard/${session?.user.role}`}
+                  className="text-[#555] hover:text-[#f59e0b] text-[14px] font-semibold transition-colors no-underline flex justify-center items-center gap-2"
+                >
+                  <CiGrid42 />
+                  Dashboard
+                </Link>
+              </div>
               <ProfileDropdown session={session} />
               <Button
                 isIconOnly

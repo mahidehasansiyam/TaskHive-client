@@ -1,0 +1,191 @@
+import React from 'react';
+import Link from 'next/link';
+import { Button } from '@heroui/react';
+import { getUserSession } from '@/lib/core/session';
+import {
+  FaListCheck,
+  FaClock,
+  FaCircleCheck,
+  FaDollarSign,
+  FaPlus,
+  FaCalendarDays,
+} from 'react-icons/fa6';
+import { getAllTasksByClientId, getLatest4TasksByClientId } from '@/lib/api/tasks';
+
+
+export default async function ClientDashboardPage() {
+  const session = await getUserSession();
+  const clientId = session.id;
+
+  // GET last 4 task by task id 
+  const latestTasks = await getLatest4TasksByClientId(clientId);
+  
+  //  GET all task by task id to find summarize 
+  const tasks = await getAllTasksByClientId(clientId);
+ 
+  
+   const stats = tasks.reduce(
+     (acc, task) => {
+       // Total tasks
+       acc.totalTasks++;
+
+       // Total open tasks
+       if (task.status === 'open') {
+         acc.openTasks++;
+       }
+
+       // Total in progress
+       if (task.status === 'in progress') {
+         acc.inProgressTasks++;
+       }
+
+       // Total spend
+       acc.totalSpent += task.budget || 0;
+
+       return acc;
+     },
+     {
+       totalTasks: 0,
+       openTasks: 0,
+       inProgressTasks: 0,
+       totalSpent: 0,
+     },
+   );
+   
+
+
+const recentTasks = latestTasks;
+const metrics = stats;
+
+
+  return (
+    <div className="space-y-8 w-full  min-h-screen animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+            Client Dashboard
+          </h1>
+          <p className="text-base text-gray-500">
+            Manage your tasks and find talented freelancers
+          </p>
+        </div>
+        <Link href="/dashboard/client/tasks/new" className="no-underline">
+          <Button className="bg-[#d97706] hover:bg-[#b45309] text-white font-semibold text-sm px-5 py-2.5 rounded-xl flex items-center gap-2">
+            <FaPlus size={13} /> Post New Task
+          </Button>
+        </Link>
+      </div>
+
+      {/* --- Main Statistics Grid --- */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-start">
+          <div>
+            <span className="text-sm font-medium text-gray-500">
+              Total Tasks
+            </span>
+            <h3 className="text-4xl font-bold text-gray-900 mt-1">
+              {metrics.totalTasks}
+            </h3>
+            <p className="text-xs text-gray-400 mt-2">All tasks created</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-[#fef3c7] text-[#d97706] flex items-center justify-center shrink-0">
+            <FaListCheck size={16} />
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-start">
+          <div>
+            <span className="text-sm font-medium text-gray-500">
+              Open Tasks
+            </span>
+            <h3 className="text-4xl font-bold text-gray-900 mt-1">
+              {metrics.openTasks}
+            </h3>
+            <p className="text-xs text-gray-400 mt-2">Awaiting proposals</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-[#fef3c7] text-[#d97706] flex items-center justify-center shrink-0">
+            <FaClock size={16} />
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-start">
+          <div>
+            <span className="text-sm font-medium text-gray-500">
+              In Progress
+            </span>
+            <h3 className="text-4xl font-bold text-gray-900 mt-1">
+              {metrics.inProgressTasks}
+            </h3>
+            <p className="text-xs text-gray-400 mt-2">
+              Currently being worked on
+            </p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-[#fef3c7] text-[#d97706] flex items-center justify-center shrink-0">
+            <FaCircleCheck size={16} />
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-start">
+          <div>
+            <span className="text-sm font-medium text-gray-500">
+              Total Spent
+            </span>
+            <h3 className="text-4xl font-bold text-gray-900 mt-1">
+              ${metrics.totalSpent}
+            </h3>
+            <p className="text-xs text-gray-400 mt-2">Total money paid (USD)</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-[#fef3c7] text-[#d97706] flex items-center justify-center shrink-0">
+            <FaDollarSign size={16} />
+          </div>
+        </div>
+      </div>
+
+      {/* --- Recent Tasks --- */}
+      <div className="space-y-4 pt-2">
+        <h2 className="text-xl font-bold text-gray-900">Recent Tasks</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {recentTasks.map(task => (
+            <div
+              key={task._id}
+              className="bg-white p-6 rounded-2xl border border-gray-100 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-start justify-between gap-4">
+                  <h3 className="font-bold text-lg text-gray-900 truncate">
+                    {task.title}
+                  </h3>
+                  <span className="bg-[#eff6ff] text-[#3b82f6] font-medium text-xs px-2.5 py-0.5 rounded-full">
+                    {task.status}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-500 mt-1">{task.description}</p>
+              </div>
+              <div className="flex items-center justify-between mt-6">
+                <div className="flex items-center gap-2">
+                  <span className="bg-gray-100 text-gray-700 text-xs font-medium px-2.5 py-1 rounded-lg">
+                    {task.category}
+                  </span>
+                  <span className="text-gray-900 text-sm font-semibold flex items-center">
+                    ${task.budget}
+                  </span>
+                  <span className="text-gray-400 text-xs flex items-center gap-1 ml-2">
+                    <FaCalendarDays size={11} />{' '}
+                    {new Date(task.createdAt).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </span>
+                </div>
+                <span className="text-xs text-gray-500">
+                  {task.proposals} proposals
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

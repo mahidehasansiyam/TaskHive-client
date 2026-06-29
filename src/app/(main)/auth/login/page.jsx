@@ -29,7 +29,8 @@ export default function LoginPage() {
     const { data, error } = await authClient.signIn.email({
         email: formData.email,
         password: formData.password,
-        rememberMe: true,
+      rememberMe: true,
+        callbackURL:"/"
     });
     console.log("data",data, "error",error);
   };
