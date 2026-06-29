@@ -1,4 +1,4 @@
-import { authClient } from '@/lib/auth-client';
+
 import { getUserSession } from '@/lib/core/session';
 import { Bars, LayoutSideContentLeft } from '@gravity-ui/icons';
 import { Button, Drawer } from '@heroui/react';
@@ -19,6 +19,7 @@ import {
   FaRightFromBracket, // Log Out
   FaSuitcase, // Header Brand Icon
 } from 'react-icons/fa6';
+import DashboardLogout from './DashboardLogout';
 
 export async function DashboardSidebar() {
   const user = await getUserSession();
@@ -51,6 +52,11 @@ export async function DashboardSidebar() {
       icon: FaDollarSign,
       href: '/dashboard/client/payments',
       label: 'Payments',
+    },
+    {
+      icon: FaUserPen,
+      href: '/dashboard/client/profile',
+      label: 'Edit Profile',
     },
   ];
 
@@ -99,6 +105,11 @@ export async function DashboardSidebar() {
       icon: FaDollarSign,
       href: '/dashboard/admin/payments',
       label: 'Payments',
+    },
+    {
+      icon: FaUserPen,
+      href: '/dashboard/admin/profile',
+      label: 'Edit Profile',
     },
   ];
 
@@ -177,15 +188,7 @@ export async function DashboardSidebar() {
         </div>
 
         {/* Sign out */}
-        <Button
-          type="submit"
-          isIconOnly
-          variant="light"
-          className="text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg min-w-0 p-1.5 shrink-0 transition-colors"
-          aria-label="Sign out"
-        >
-          <FaRightFromBracket size={16} />
-        </Button>
+        <DashboardLogout/>
       </div>
     </div>
   );

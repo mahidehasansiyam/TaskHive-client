@@ -1,19 +1,40 @@
 
 import FreelancerDashboardStats from '@/Components/Dashboard/Freelancer/Freelancerstats';
 import React from 'react';
+import RecentFreelancerProposals from './RecentFreelancerProposals';
+import axios from 'axios';
+import { getUserSession } from '@/lib/core/session';
 
-const FreelancerHomePAge = () => {
+const FreelancerHomePAge = async () => {
+  
+  const user = await getUserSession();
 
-  const dashboardData = {
-    totalProposals: 4,
-    pending: 1,
-    accepted: 2,
-    totalEarned: 677,
+
+  const { data } = await axios.get(
+  `${process.env.NEXT_PUBLIC_SERVER_URL}/proposal-stats`,
+  {
+    params: {
+      freelancer_email: user?.email
+    }
+  }
+);
+
+
+const dashboardData = {
+    totalProposals: data.totalProposal,
+    pending: data.totalPending,
+    accepted: data.totalAccepted,
+    totalEarned: data.totalEarning,
+    totalRejected: data.totalRejected,
   };
+  // console.log(dashboardData);
+
+  
 
   return (
     <div>
       <FreelancerDashboardStats stats={dashboardData} />
+      <RecentFreelancerProposals/>
     </div>
   );
 };

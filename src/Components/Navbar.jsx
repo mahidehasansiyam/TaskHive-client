@@ -9,6 +9,7 @@ import { PiSignOutFill } from 'react-icons/pi';
 import { ArrowRightFromSquare } from '@gravity-ui/icons';
 import { useRouter } from 'next/navigation';
 import { CiGrid42 } from 'react-icons/ci';
+import { CircleLoader } from 'react-spinners';
 
 
 export default  function Navbar() {
@@ -96,7 +97,11 @@ export default  function Navbar() {
 
         {/* Right: Desktop Actions View */}
         <div className="hidden md:flex items-center gap-8">
-          {session ? (
+          {isPending ? (
+            <div>
+              <CircleLoader size={40} color="#f59e0b" />
+            </div>
+          ) : session ? (
             <div className="flex items-center gap-4 justify-center">
               <div>
                 <Link
@@ -107,7 +112,9 @@ export default  function Navbar() {
                   Dashboard
                 </Link>
               </div>
+
               <ProfileDropdown session={session} />
+
               <Button
                 isIconOnly
                 onClick={handleSignout}
@@ -125,10 +132,11 @@ export default  function Navbar() {
               >
                 Sign In
               </Link>
+
               <Link href="/login">
                 <Button
                   radius="md"
-                  className="bg-gradient-to-r from-[#f39c12] to-[#e67e22] hover:from-[#e67e22] hover:to-[#d35400] text-white font-bold px-6 h-11 text-[14px] shadow-sm shadow-amber-500/20 transition-all border-none rounded-2xl"
+                  className="bg-gradient-to-r from-[#f39c12] to-[#e67e22] text-white font-bold px-6 h-11 text-[14px] shadow-sm rounded-2xl"
                 >
                   Get Started
                 </Button>

@@ -4,6 +4,8 @@ import React from 'react';
 import { LuSearch, LuFileText, LuClock } from 'react-icons/lu';
 import { FaDollarSign } from 'react-icons/fa6';
 import { MdCheckCircle } from 'react-icons/md';
+import { FaRegCheckCircle } from 'react-icons/fa';
+import { RxCrossCircled } from 'react-icons/rx';
 
 const FreelancerDashboardStats = ({ stats }) => {
   // Fallback default values if dynamic data hasn't loaded yet
@@ -38,7 +40,7 @@ const FreelancerDashboardStats = ({ stats }) => {
       </div>
 
       {/* Grid Overview Cards Wrapper */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         {/* Card 1: Total Proposals */}
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] flex justify-between items-start">
           <div className="space-y-1">
@@ -89,7 +91,25 @@ const FreelancerDashboardStats = ({ stats }) => {
             </span>
           </div>
           <div className="w-12 h-12 rounded-xl bg-[#fff4e6] flex items-center justify-center shrink-0 text-[#ea7a02]">
-            <MdCheckCircle className="text-xl stroke-[2]"/>
+            <FaRegCheckCircle className="text-xl stroke-[2]" />
+          </div>
+        </div>
+
+        {/* Card 3: Rejected Proposals */}
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] flex justify-between items-start">
+          <div className="space-y-1">
+            <span className="block text-sm text-gray-400 font-bold tracking-wide">
+              Rejected
+            </span>
+            <span className="block text-4xl font-extrabold text-gray-900">
+              {dynamicStats.totalRejected}
+            </span>
+            <span className="block text-xs text-gray-400 font-medium pt-1">
+              Proposals Rejected
+            </span>
+          </div>
+          <div className="w-12 h-12 rounded-xl bg-[#fff4e6] flex items-center justify-center shrink-0 text-[#ea7a02]">
+            <RxCrossCircled className="text-xl stroke-[2]" />
           </div>
         </div>
 

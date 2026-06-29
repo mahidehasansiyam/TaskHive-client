@@ -11,19 +11,22 @@ import {
   FaCalendarDays,
 } from 'react-icons/fa6';
 import { getAllTasksByClientId, getLatest4TasksByClientId } from '@/lib/api/tasks';
+import TaskCard from './tasks/TaskCard';
+import ClientRecentTask from './ClientRecentTask';
 
 
 export default async function ClientDashboardPage() {
   const session = await getUserSession();
   const clientId = session.id;
 
+
+
   // GET last 4 task by task id 
   const latestTasks = await getLatest4TasksByClientId(clientId);
   
   //  GET all task by task id to find summarize 
   const tasks = await getAllTasksByClientId(clientId);
- 
-  
+
    const stats = tasks.reduce(
      (acc, task) => {
        // Total tasks
@@ -92,7 +95,7 @@ const metrics = stats;
             <FaListCheck size={16} />
           </div>
         </div>
-        
+
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-start">
           <div>
             <span className="text-sm font-medium text-gray-500">
@@ -144,47 +147,8 @@ const metrics = stats;
       {/* --- Recent Tasks --- */}
       <div className="space-y-4 pt-2">
         <h2 className="text-xl font-bold text-gray-900">Recent Tasks</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {recentTasks.map(task => (
-            <div
-              key={task._id}
-              className="bg-white p-6 rounded-2xl border border-gray-100 flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-start justify-between gap-4">
-                  <h3 className="font-bold text-lg text-gray-900 truncate">
-                    {task.title}
-                  </h3>
-                  <span className="bg-[#eff6ff] text-[#3b82f6] font-medium text-xs px-2.5 py-0.5 rounded-full">
-                    {task.status}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1">{task.description}</p>
-              </div>
-              <div className="flex items-center justify-between mt-6">
-                <div className="flex items-center gap-2">
-                  <span className="bg-gray-100 text-gray-700 text-xs font-medium px-2.5 py-1 rounded-lg">
-                    {task.category}
-                  </span>
-                  <span className="text-gray-900 text-sm font-semibold flex items-center">
-                    ${task.budget}
-                  </span>
-                  <span className="text-gray-400 text-xs flex items-center gap-1 ml-2">
-                    <FaCalendarDays size={11} />{' '}
-                    {new Date(task.createdAt).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                  </span>
-                </div>
-                <span className="text-xs text-gray-500">
-                  {task.proposals} proposals
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+       {/* Redirect to task show page */}
+        <ClientRecentTask tasks={recentTasks} />
       </div>
     </div>
   );

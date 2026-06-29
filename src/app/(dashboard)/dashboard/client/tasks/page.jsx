@@ -10,7 +10,7 @@ const page = async () => {
   const clientId = session?.id;
   // console.log(clientId);
    
-   //  GET all task by task id to find summarize 
+   //  GET all task by client id to find summarize 
     const tasks = await getAllTasksByClientId(clientId);
 
   // console.log(tasks);
