@@ -1,7 +1,5 @@
 import { serverFetch } from "../core/server";
 
-
-
 // GET proposals by freelancer email 
 export const getProposalsByFreelancerEmail = async (email) => {
   return serverFetch(`/proposals?freelancer_email=${email}`);
