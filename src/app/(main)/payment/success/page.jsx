@@ -242,7 +242,7 @@ export default async function Success({ searchParams }) {
                   Back to Proposals
                 </Link>
                 <Link
-                  href="/dashboard"
+                  href="/dashboard/client"
                   className="flex-1 bg-white border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-3 px-6 rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
                 >
                   <FiUser className="w-5 h-5" />

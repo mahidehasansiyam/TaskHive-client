@@ -1,6 +1,11 @@
 import { serverFetch } from "../core/server";
 
 
+// GET all users 
+export const getAllUsers = async () => {
+  return serverFetch('/users');
+};
+
 // GET Freelancers
 export const getFreelancer = async () => {
   return serverFetch('/freelancers');
