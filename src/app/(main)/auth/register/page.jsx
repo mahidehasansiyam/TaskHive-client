@@ -20,16 +20,10 @@ export default function RegisterPage() {
 
   // Google OAuth rule: Any signups through Google default automatically to Client role
   const handleGoogleLogin = async () => {
-    try {
-      await authClient.signIn.social({
-        provider: 'google',
-        callbackURL: '/',
-        // Pass the role metadata over to your session if configured in your schema
-        newUserRole: 'client',
-      });
-    } catch (err) {
-      console.error('Google Sign Up Error:', err);
-    }
+     const data = await authClient.signIn.social({
+    provider: "google",
+  });
+    
   };
 
   const onSubmit = async e => {
@@ -63,8 +57,8 @@ export default function RegisterPage() {
       name: formData.name,
       email: formData.email,
       password: formData.password,
-      image: formData.imageUrl || '', // Safe mapping fallback for non-required image URL
-      role: role,
+      image: formData.imageUrl || '', 
+      role: role || "client",
       skills: customSkills,
       bio: customBio,
       hourlyRate: customHourlyRate,

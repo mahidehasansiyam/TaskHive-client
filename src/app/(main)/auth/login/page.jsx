@@ -14,25 +14,26 @@ import { authClient } from '@/lib/auth-client';
 
 export default function LoginPage() {
   // Handlers for social authentication providers
-  const handleGoogleLogin = () => {
-    alert('Initiating secure Google OAuth single-sign-on workflow...');
+  const handleGoogleLogin = async () => {
+    
+    const data = await authClient.signIn.social({
+      provider: 'google',
+    });
   };
 
-  const onSubmit =async e => {
+  const onSubmit = async e => {
     e.preventDefault();
     const formData = Object.fromEntries(
       new FormData(e.currentTarget).entries(),
     );
-    
-    
 
     const { data, error } = await authClient.signIn.email({
-        email: formData.email,
-        password: formData.password,
+      email: formData.email,
+      password: formData.password,
       rememberMe: true,
-        callbackURL:"/"
+      callbackURL: '/',
     });
-    console.log("data",data, "error",error);
+    console.log('data', data, 'error', error);
   };
 
   return (
@@ -168,7 +169,10 @@ export default function LoginPage() {
         </Form>
 
         {/* Alternative Page Redirect Navigation Trigger Link */}
-        <Link href="/auth/register" className="text-gray-400 font-medium text-sm text-center mt-6">
+        <Link
+          href="/auth/register"
+          className="text-gray-400 font-medium text-sm text-center mt-6"
+        >
           Don&apos;t have an account?{' '}
           <span className="text-[#f59e0b] font-bold cursor-pointer hover:underline">
             Sign up
