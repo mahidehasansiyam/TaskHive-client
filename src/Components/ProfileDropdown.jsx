@@ -12,8 +12,12 @@ export function ProfileDropdown({ session }) {
   const handleDashboardRedirect = () => {
     if (userRole === 'freelancer') {
       router.push('/dashboard/freelancer');
-    } else {
-      router.push('/dashboard/recruiter');
+    }
+    if (userRole === 'admin') {
+      router.push('/dashboard/admin');
+    }
+    if (userRole === 'client') {
+      router.push('/dashboard/client');
     }
   };
 
@@ -88,6 +92,7 @@ export function ProfileDropdown({ session }) {
 
           <Dropdown.Item
             id="profile"
+            onPress={() => router.push(`/dashboard/${userRole}/profile`)}
             textValue="Profile"
             className="rounded-xl data-[hover=true]:bg-amber-50 data-[hover=true]:text-amber-800 text-gray-700 transition-colors duration-150 px-3 py-2 cursor-pointer"
           >

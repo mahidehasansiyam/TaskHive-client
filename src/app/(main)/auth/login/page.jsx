@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Form,
   TextField,
@@ -13,6 +13,16 @@ import Link from 'next/link';
 import { authClient } from '@/lib/auth-client';
 
 export default function LoginPage() {
+
+  const {
+    data: session,
+  } = authClient.useSession(); 
+  const user = session?.user;
+  const role =user?.role
+
+   const [loading, setLoading] = useState(false);
+
+
   // Handlers for social authentication providers
   const handleGoogleLogin = async () => {
     
@@ -22,6 +32,7 @@ export default function LoginPage() {
   };
 
   const onSubmit = async e => {
+    setLoading(true);
     e.preventDefault();
     const formData = Object.fromEntries(
       new FormData(e.currentTarget).entries(),
@@ -31,9 +42,10 @@ export default function LoginPage() {
       email: formData.email,
       password: formData.password,
       rememberMe: true,
-      callbackURL: '/',
+      callbackURL: "/",
     });
     console.log('data', data, 'error', error);
+    setLoading(false);
   };
 
   return (
@@ -149,10 +161,11 @@ export default function LoginPage() {
           {/* Core Submit Call-To-Action Trigger */}
           <Button
             type="submit"
+            disabled={loading}
             className="w-full h-12 bg-gradient-to-r from-[#f59e0b] to-[#ea580c] hover:from-[#ea580c] hover:to-[#d97706] text-white font-bold text-[15px] rounded-xl flex items-center justify-center gap-2 shadow-md shadow-orange-500/20 border-none outline-none mt-2 transition-all group"
           >
-            <span>Sign In</span>
-            <svg
+            <span>{loading ? 'Signing in...' : 'Sign in'}</span>
+            {!loading && <svg
               className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
               fill="none"
               viewBox="0 0 24 24"
@@ -164,7 +177,7 @@ export default function LoginPage() {
                 strokeLinejoin="round"
                 d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h3a3 3 0 013 3v1"
               />
-            </svg>
+            </svg>}
           </Button>
         </Form>
 
@@ -173,7 +186,7 @@ export default function LoginPage() {
           href="/auth/register"
           className="text-gray-400 font-medium text-sm text-center mt-6"
         >
-          Don&apos;t have an account?{' '}
+          Don't have an account?{' '}
           <span className="text-[#f59e0b] font-bold cursor-pointer hover:underline">
             Sign up
           </span>

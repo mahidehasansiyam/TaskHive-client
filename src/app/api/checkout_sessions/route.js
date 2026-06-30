@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { stripe } from '@/lib/stripe';
-import { getSession } from 'better-auth/api';
+import { getUserSession } from '@/lib/core/session';
+
 
 
 
@@ -10,15 +11,16 @@ export async function POST(request) {
     const headersList = await headers();
     const origin = headersList.get('origin');
 
-    const userSession = await getSession();
+    const userSession = await getUserSession();
     const user = userSession;
+    console.log(user);
+
     const formData = await request.formData();
 
     const proposalId = formData.get('proposalId');
+    const freelancerEmail = formData.get('email');
     const budget = formData.get('budget');
     const title = formData.get('title');
-    const freelancerEmail = formData.get('email');
-    console.log(user);
     
 
     // Create Checkout Sessions from body params.
@@ -38,11 +40,10 @@ export async function POST(request) {
       ],
       metadata: {
         proposalId,
-        title,
         freelancerEmail,
-        budget: Number(budget),
-        userId: user.id,
-        userEmail: user.email,
+        clientEmail: user.email,
+        title,
+        finalBudget: Number(budget),
       },
       mode: 'payment',
       success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,

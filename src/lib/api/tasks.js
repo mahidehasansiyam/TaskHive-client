@@ -1,5 +1,12 @@
 import { serverFetch } from '../core/server';
 
+
+// GET all tasks
+export const getAllTasks = async () => {
+  return serverFetch('/tasks');
+};
+
+
 // GET open tasks
 export const getOpenTasks = async () => {
   return serverFetch('/open/tasks');

@@ -1,6 +1,6 @@
 
 import { getUserSession } from '@/lib/core/session';
-import { Bars, LayoutSideContentLeft } from '@gravity-ui/icons';
+import { Bars} from '@gravity-ui/icons';
 import { Button, Drawer } from '@heroui/react';
 import Link from 'next/link';
 

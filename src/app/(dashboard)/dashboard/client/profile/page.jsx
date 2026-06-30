@@ -2,7 +2,7 @@ import { getUserSession } from '@/lib/core/session';
 import React from 'react';
 import Profile from '../../../../../Components/Dashboard/Profile';
 
-const page =async () => {
+const Page =async () => {
   const user = await getUserSession();
   // console.log(user);
   
@@ -13,4 +13,4 @@ const page =async () => {
   );
 };
 
-export default page;
+export default Page;

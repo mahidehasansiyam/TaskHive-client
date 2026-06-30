@@ -1,6 +1,9 @@
+import { getAllTasks } from '@/lib/api/tasks';
 import React from 'react';
 
-const AdminHomePage = () => {
+const AdminHomePage =async () => {
+  const allTasks = await getAllTasks();
+  console.log(allTasks);
   return (
     <div>
      

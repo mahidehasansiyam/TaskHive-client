@@ -34,39 +34,6 @@ export default async function Success({ searchParams }) {
   }
 
   if (status === 'complete') {
-    // console.log(metadata);
-     try {
-       const response = await fetch(
-         `${process.env.NEXT_PUBLIC_SERVER_URL}/proposals/accept/${metadata.proposalId}`,
-         {
-           method: 'PATCH',
-           headers: {
-             'Content-Type': 'application/json',
-           },
-           body: JSON.stringify({
-             status: 'accepted',
-           }),
-         },
-       );
-
-       if (!response.ok) {
-         throw new Error('Failed to accept proposal');
-       }
-
-       const data = await response.json();
-
-       console.log('Proposal updated:', data);
-
-       // no return here
-     } catch (error) {
-       console.error('Error accepting proposal:', error);
-     }
-  
-
-
-
-
-
     // Format currency
     const formatCurrency = (amount, currency) => {
       return new Intl.NumberFormat('en-US', {
@@ -88,6 +55,65 @@ export default async function Success({ searchParams }) {
       hour: '2-digit',
       minute: '2-digit',
     });
+
+    const paymentData = {
+      ...metadata,
+      tranjectionId:paymentId,
+    };
+    // console.log("Payment Data:",paymentData);
+
+    // UPDATE proposal statud = accept and task status = completed
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/proposals/accept/${metadata.proposalId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            status: 'accepted',
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to accept proposal');
+      }
+
+      const data = await response.json();
+
+      console.log('Proposal updated:', data);
+
+      // no return here
+    } catch (error) {
+      console.error('Error accepting proposal:', error);
+    }
+
+    // POST payment information
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/payments`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(paymentData),
+        },
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log('Payment saved:', result);
+      } else {
+        console.log('Error:', result.message);
+      }
+    } catch (error) {
+      console.log('Payment Error:', error);
+    }
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-6">

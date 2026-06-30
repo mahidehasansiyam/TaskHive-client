@@ -5,7 +5,6 @@ import { Button } from '@heroui/react';
 import Link from 'next/link';
 import { authClient } from '@/lib/auth-client';
 import { ProfileDropdown } from './ProfileDropdown';
-import { PiSignOutFill } from 'react-icons/pi';
 import { ArrowRightFromSquare } from '@gravity-ui/icons';
 import { useRouter } from 'next/navigation';
 import { CiGrid42 } from 'react-icons/ci';

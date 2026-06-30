@@ -96,13 +96,12 @@ export default function HeroSection() {
             <Link href="/tasks" className="w-full sm:w-auto no-underline">
               <Button
                 radius="xl"
-                variant="bordered"
-                className="w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-800 font-bold px-8 h-14 text-[15px] border border-gray-100 shadow-sm flex items-center justify-center gap-2 rounded-2xl"
+                className="w-full sm:w-auto bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white font-bold px-8 h-14 text-[15px] shadow-lg shadow-orange-500/30 border-none flex items-center justify-center gap-2 group rounded-2xl"
               >
                 <span>Browse Tasks</span>
 
                 <svg
-                  className="w-3.5 h-3.5 text-gray-400"
+                  className="w-3.5 h-3.5 text-white transition-transform group-hover:translate-x-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

@@ -40,6 +40,11 @@ export const auth = betterAuth({
         required: false,
         defaultValue: 0,
       },
+      isBlocked: {
+        type: 'string',
+        required: false,
+        defaultValue: '',
+      },
     },
   },
 });

@@ -62,6 +62,7 @@ export default function RegisterPage() {
       skills: customSkills,
       bio: customBio,
       hourlyRate: customHourlyRate,
+      isBlocked : "no",
       callbackURL: '/',
     });
 
