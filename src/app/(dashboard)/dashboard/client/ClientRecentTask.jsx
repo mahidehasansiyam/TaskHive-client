@@ -9,8 +9,7 @@ const ClientRecentTask = ({ tasks }) => {
   const router = useRouter();
 
  const handleDelete = async taskId => {
-     if (!confirm('Are you sure you want to delete this task?')) return;
- 
+     
      // DELETE task
      try {
        const data = await deleteTask(taskId);

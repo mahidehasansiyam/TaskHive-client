@@ -1,9 +1,20 @@
-import React from 'react';
 
-const Users = () => {
+
+import UsersTable from '@/Components/Dashboard/Admin/UsersTable';
+import { getAllUsers } from '@/lib/api/user';
+
+
+const Users = async () => {
+  const allUsers = await getAllUsers();
+
+  // Remove admin users
+  const users = allUsers.filter(user => user.role !== 'admin');
+
   return (
-    <div>
-      Users
+    <div className="p-6">
+      <h1 className="text-2xl text-black font-bold mb-6">Users Management</h1>
+
+      <UsersTable users={users} />
     </div>
   );
 };
