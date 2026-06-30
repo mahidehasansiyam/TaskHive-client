@@ -31,7 +31,7 @@ const page = async () => {
                   />
                 </svg>
               </span>
-              All Payments
+              All Revinue
             </h1>
             <p className="text-gray-600 mt-1 ml-1">
               Total Transactions:{' '}
@@ -48,9 +48,8 @@ const page = async () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
-                  
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Freelancer Email
+                    Client Email
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Transaction ID
@@ -72,14 +71,13 @@ const page = async () => {
                       index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
                     }`}
                   >
-                   
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-teal-400 flex items-center justify-center text-white text-xs font-bold">
-                          {payment.freelancerEmail.charAt(0).toUpperCase()}
+                          {payment.clientEmail.charAt(0).toUpperCase()}
                         </div>
                         <span className="text-sm text-gray-700">
-                          {payment.freelancerEmail}
+                          {payment.clientEmail}
                         </span>
                       </div>
                     </td>
