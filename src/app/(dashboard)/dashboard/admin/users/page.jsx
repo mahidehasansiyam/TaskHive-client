@@ -21,8 +21,3 @@ const Users = async () => {
 
 export default Users;
 
-
-
-
-
-
