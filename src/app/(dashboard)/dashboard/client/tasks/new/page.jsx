@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@heroui/react';
 import { authClient } from '@/lib/auth-client';
 import { postTask } from '@/lib/action/task';
+import { BeatLoader } from 'react-spinners';
 
 export default function PostTaskPage() {
   const router = useRouter();
@@ -50,8 +51,8 @@ export default function PostTaskPage() {
 
   if (isPending) {
     return (
-      <div className="text-center p-8 text-sm text-gray-500">
-        Loading profile session...
+      <div className="max-w-7xl h-screen flex items-center justify-center mx-auto px-8 py-12 text-gray-500 font-medium">
+        <BeatLoader color="#f59e0b" size={20} />
       </div>
     );
   }

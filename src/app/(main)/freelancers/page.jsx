@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link'; // Import the Link component
 import { LuBriefcase } from 'react-icons/lu';
 import { FaStar } from 'react-icons/fa6';
+import { BeatLoader } from 'react-spinners';
 
 const Freelancers = () => {
   const [freelancers, setFreelancers] = useState([]);
@@ -37,8 +38,8 @@ const Freelancers = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-8 py-12 text-gray-500 font-medium">
-        Loading...
+      <div className="max-w-7xl h-screen flex items-center justify-center mx-auto px-8 py-12 text-gray-500 font-medium">
+        <BeatLoader color="#f59e0b"  size={20} />
       </div>
     );
   }
