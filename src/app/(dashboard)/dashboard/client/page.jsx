@@ -11,7 +11,6 @@ import {
   FaCalendarDays,
 } from 'react-icons/fa6';
 import { getAllTasksByClientId, getLatest4TasksByClientId } from '@/lib/api/tasks';
-import TaskCard from './tasks/TaskCard';
 import ClientRecentTask from './ClientRecentTask';
 
 
