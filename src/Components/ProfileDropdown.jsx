@@ -1,7 +1,5 @@
 'use client';
 
-import { authClient } from '@/lib/auth-client';
-import { ArrowRightFromSquare } from '@gravity-ui/icons';
 import { Dropdown } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 

@@ -2,12 +2,16 @@
 import { authClient } from '@/lib/auth-client';
 import { ArrowRightFromSquare } from '@gravity-ui/icons';
 import { Button } from '@heroui/react';
+
 import React from 'react';
 
 
 const DashboardLogout = () => {
+  
   const handleLogout =async () => {
     await authClient.signOut();
+    window.location.href = '/';
+    
   }
   return (
     <div>

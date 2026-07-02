@@ -33,7 +33,7 @@ export default function GetStart() {
           </p>
 
           {/* Action Button styled explicitly to match image_8a57e3.jpg */}
-          <Link href="/register" className="no-underline w-full sm:w-auto">
+          <Link href="/auth/register" className="no-underline w-full sm:w-auto">
             <Button
               radius="xl"
               className="w-full sm:w-auto bg-gradient-to-r from-[#f59e0b] to-[#ea580c] hover:from-[#ea580c] hover:to-[#d97706] text-white font-bold px-8 h-14 text-[15px] shadow-[0_10px_25px_rgba(234,88,12,0.3)] border-none transition-all duration-200 flex items-center justify-center gap-2 group rounded-2xl"

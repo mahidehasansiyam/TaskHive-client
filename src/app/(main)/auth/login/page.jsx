@@ -13,12 +13,13 @@ import Link from 'next/link';
 import { authClient } from '@/lib/auth-client';
 
 export default function LoginPage() {
+ 
 
-  const {
-    data: session,
-  } = authClient.useSession(); 
+  const {data: session} = authClient.useSession(); 
   const user = session?.user;
-  const role =user?.role
+  const role = user?.role
+  console.log(role);
+
 
    const [loading, setLoading] = useState(false);
 
@@ -32,8 +33,9 @@ export default function LoginPage() {
   };
 
   const onSubmit = async e => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
+
     const formData = Object.fromEntries(
       new FormData(e.currentTarget).entries(),
     );
@@ -42,10 +44,31 @@ export default function LoginPage() {
       email: formData.email,
       password: formData.password,
       rememberMe: true,
-      callbackURL: "/",
     });
-    console.log('data', data, 'error', error);
+
     setLoading(false);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    // Get fresh session after login
+    const session = await authClient.getSession();
+
+    const role = session?.data?.user?.role;
+
+    console.log('Role:', role);
+
+    if (role === 'client') {
+      window.location.href = '/dashboard/client';
+    } else if (role === 'freelancer') {
+      window.location.href = '/dashboard/freelancer';
+    } else {
+      window.location.href = '/';
+      
+
+    }
   };
 
   return (

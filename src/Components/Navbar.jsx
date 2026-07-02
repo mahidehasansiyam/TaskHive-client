@@ -22,6 +22,7 @@ export default  function Navbar() {
   const handleSignout = async () => {
     setIsOpen(false);
     await authClient.signOut();
+    window.location.href = '/';
   };
 
   const handleDashboardRedirect = () => {
@@ -132,7 +133,7 @@ export default  function Navbar() {
                 Sign In
               </Link>
 
-              <Link href="/login">
+              <Link href="/auth/register">
                 <Button
                   radius="md"
                   className="bg-gradient-to-r from-[#f39c12] to-[#e67e22] text-white font-bold px-6 h-11 text-[14px] shadow-sm rounded-2xl"
