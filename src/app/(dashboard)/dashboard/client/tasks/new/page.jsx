@@ -36,8 +36,6 @@ export default function PostTaskPage() {
       budget: parseFloat(formData.get('budget') || '0'),
       deadline: formData.get('deadline'),
       status: 'open',
-      proposals: 0,
-      earnings: 0,
       createdAt: new Date().toISOString(),
     };
 
