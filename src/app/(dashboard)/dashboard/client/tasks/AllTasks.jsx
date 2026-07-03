@@ -16,6 +16,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { deleteTask } from '@/lib/action/task';
 import TaskCard from './TaskCard';
+import { toast } from 'react-toastify';
 
 const AllTasks = ({ tasks = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,12 +42,12 @@ const AllTasks = ({ tasks = [] }) => {
   }, [tasks, searchTerm, selectedCategory, selectedStatus]);
 
   const handleDelete = async taskId => {
-    if (!confirm('Are you sure you want to delete this task?')) return;
-
+  
     // DELETE task
     try {
       const data = await deleteTask(taskId);
       if (data.deletedCount > 0) {
+        toast.success('Task deleted successfully!');
         router.refresh();
       }
     } catch (error) {

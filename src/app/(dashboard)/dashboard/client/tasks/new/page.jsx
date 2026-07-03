@@ -6,6 +6,7 @@ import { Button } from '@heroui/react';
 import { authClient } from '@/lib/auth-client';
 import { postTask } from '@/lib/action/task';
 import { BeatLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
 
 export default function PostTaskPage() {
   const router = useRouter();
@@ -43,7 +44,10 @@ export default function PostTaskPage() {
     try {
       await postTask(taskPayload);
 
-      router.push('/dashboard/client');
+      toast.success('Task posted successfully!');
+
+      // router.push('/dashboard/client');
+      window.location.href = '/dashboard/client';
     } catch (error) {
       console.error('Submission failed:', error);
     } finally {
@@ -82,7 +86,7 @@ export default function PostTaskPage() {
               type="text"
               required
               disabled={isSubmitting}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 focus:outline-none focus:border-amber-500"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-black bg-gray-50 focus:outline-none focus:border-amber-500"
               placeholder="e.g., Design a landing page"
             />
           </div>
@@ -98,7 +102,7 @@ export default function PostTaskPage() {
               required
               disabled={isSubmitting}
               defaultValue=""
-              className="w-full max-w-xs px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-amber-500"
+              className="w-full max-w-xs px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-amber-500 text-black"
             >
               <option value="" disabled>
                 Select a category
@@ -120,7 +124,7 @@ export default function PostTaskPage() {
               rows={4}
               required
               disabled={isSubmitting}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-amber-500"
+              className="w-full px-4 py-3 text-black rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-amber-500"
               placeholder="Provide task details..."
             />
           </div>
@@ -137,7 +141,7 @@ export default function PostTaskPage() {
                 type="number"
                 required
                 disabled={isSubmitting}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-amber-500"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-black bg-gray-50 focus:outline-none focus:border-amber-500"
                 placeholder="500"
               />
             </div>
@@ -152,7 +156,7 @@ export default function PostTaskPage() {
                 type="date"
                 required
                 disabled={isSubmitting}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-amber-500"
+                className="w-full px-4 py-3 rounded-xl border text-black border-gray-200 bg-gray-50 focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
@@ -174,7 +178,7 @@ export default function PostTaskPage() {
               className="flex-1 bg-[#d97706] hover:bg-[#b45309] text-white font-bold py-3 rounded-xl"
             >
               {isSubmitting ? (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center gap-3">
                   <BeatLoader color="#fff" size={8} />
                   <span>Posting your task...</span>
                 </div>

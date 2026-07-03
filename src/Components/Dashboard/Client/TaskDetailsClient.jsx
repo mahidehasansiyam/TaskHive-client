@@ -11,6 +11,7 @@ import {
   FaCalendarDays,
 } from 'react-icons/fa6';
 import { updateTask } from '@/lib/action/task';
+import { toast } from 'react-toastify';
 
 export default function TaskDetailsClient({ initialTask, taskId }) {
   const router = useRouter();
@@ -43,6 +44,7 @@ export default function TaskDetailsClient({ initialTask, taskId }) {
     try {
       const res = await updateTask(taskId, updatedPayload)
       if (res.modifiedCount>0) {
+        toast.success('Task updated successfully!');
         router.push('/dashboard/client/tasks');
       } else {
         console.log('Update failed:', res.statusText);

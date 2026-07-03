@@ -43,7 +43,7 @@ export default function HeroSection() {
             The modern freelance platform
           </span>
         </div>
-
+        
         {/* Dynamic Typography Main Heading */}
         <h1 className="text-4xl sm:text-6xl lg:text-[72px] font-extrabold text-gray-900 tracking-tight leading-[1.1] mb-6 select-none">
           Get your tasks done <br />

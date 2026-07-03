@@ -3,6 +3,7 @@ import React from 'react';
 import TaskCard from './tasks/TaskCard';
 import { deleteTask } from '@/lib/action/task';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const ClientRecentTask = ({ tasks }) => {
 
@@ -14,6 +15,7 @@ const ClientRecentTask = ({ tasks }) => {
      try {
        const data = await deleteTask(taskId);
        if (data.deletedCount > 0) {
+         toast.success('Task deleted successfully!');
          router.refresh();
        }
      } catch (error) {
