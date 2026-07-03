@@ -80,10 +80,20 @@ const TaskCard = ({ task, handleDelete }) => {
             </span>
           )}
 
-          <span className="text-black font-normal flex items-center gap-1">
-            <FaUsers className="text-gray-400 shrink-0" size={13} />
-            {task.proposals ?? 0}{' '}
-            {task.proposals === 1 ? 'proposal' : 'proposals'}
+          <span
+            className={`font-normal flex items-center gap-1 px-3 py-1 rounded-full w-fit ${
+              (task.pendingCount ?? 0) === 0
+                ? 'bg-green-100 text-green-700'
+                : 'bg-orange-100 text-orange-700'
+            }`}
+          >
+            <FaUsers size={13} className="shrink-0" />
+
+            {(task.pendingCount ?? 0) === 0
+              ? 'No proposals'
+              : `${task.pendingCount} ${
+                  task.pendingCount === 1 ? 'proposal' : 'proposals'
+                }`}
           </span>
 
           {isCompleted && (

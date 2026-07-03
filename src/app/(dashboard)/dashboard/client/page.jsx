@@ -10,21 +10,19 @@ import {
   FaPlus,
   FaCalendarDays,
 } from 'react-icons/fa6';
-import { getAllTasksByClientId, getLatest4TasksByClientId } from '@/lib/api/tasks';
+import { getAllTasksByClientEmail, getLatest4TasksByClientEmail} from '@/lib/api/tasks';
 import ClientRecentTask from './ClientRecentTask';
 
 
 export default async function ClientDashboardPage() {
   const session = await getUserSession();
-  const clientId = session.id;
-
-
-
-  // GET last 4 task by task id 
-  const latestTasks = await getLatest4TasksByClientId(clientId);
   
-  //  GET all task by task id to find summarize 
-  const tasks = await getAllTasksByClientId(clientId);
+  // GET last 4 task by task id 
+  const latestTasks = await getLatest4TasksByClientEmail(session.email);
+  
+  //  GET all task by client email to find summarize 
+  const tasks = await getAllTasksByClientEmail(session.email);
+  // console.log("TAsks",tasks);
 
    const stats = tasks.reduce(
      (acc, task) => {

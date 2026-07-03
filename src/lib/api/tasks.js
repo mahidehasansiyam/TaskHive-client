@@ -6,6 +6,11 @@ export const getAllTasks = async () => {
   return serverFetch('/tasks');
 };
 
+// Get all tasks by client email
+export const getAllTasksByClientEmail = async (email) => {
+  return serverFetch(`/tasks?clientEmail=${email}`);
+};
+
 
 // GET open tasks
 export const getOpenTasks = async () => {
@@ -17,14 +22,9 @@ export const getTasksByTaskId = async (taskId) => {
   return serverFetch(`/tasks/${taskId}`);
 };
 
-// GET all tasks by client id
-export const getAllTasksByClientId = async (clientId) => {
-  return serverFetch(`/tasks/clientid?clientId=${clientId}`);
-};
-
 // GET last 4 task by client id 
-export const getLatest4TasksByClientId = async (clientId) => {
-  return serverFetch(`/latest/tasks?clientId=${clientId}`);
+export const getLatest4TasksByClientEmail = async (clientEmail) => {
+  return serverFetch(`/latest/tasks?clientEmail=${clientEmail}`);
 };
 
 

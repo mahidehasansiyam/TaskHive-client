@@ -1,17 +1,20 @@
 import React from 'react';
 import AllTasks from './AllTasks';
 import { getUserSession } from '@/lib/core/session';
-import { getAllTasksByClientId } from '@/lib/api/tasks';
+import { getAllTasksByClientEmail } from '@/lib/api/tasks';
+
 
 const page = async () => {
   const session = await getUserSession();
   // console.log(session);
 
-  const clientId = session?.id;
+  const clientEmail = session?.email;
+  // console.log("Client Email:", clientEmail);
   // console.log(clientId);
    
-   //  GET all task by client id to find summarize 
-    const tasks = await getAllTasksByClientId(clientId);
+   //  GET all task by client email 
+  const tasks = await getAllTasksByClientEmail(clientEmail);
+  // console.log(tasks);
 
   // console.log(tasks);
   return <div>

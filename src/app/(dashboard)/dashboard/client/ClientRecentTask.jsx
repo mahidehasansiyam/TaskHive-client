@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 const ClientRecentTask = ({ tasks }) => {
-
+  //  console.log(tasks);
   const router = useRouter();
 
  const handleDelete = async taskId => {

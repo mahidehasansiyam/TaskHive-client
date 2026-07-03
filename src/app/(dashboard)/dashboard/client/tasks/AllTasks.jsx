@@ -24,7 +24,7 @@ const AllTasks = ({ tasks = [] }) => {
   const [selectedStatus, setSelectedStatus] = useState('all');
 
   const router = useRouter();
-
+    console.log(tasks);
   // Dynamic filter logic
   const filteredTasks = useMemo(() => {
     return tasks.filter(task => {
