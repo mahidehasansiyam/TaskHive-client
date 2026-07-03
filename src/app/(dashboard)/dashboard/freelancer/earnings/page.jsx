@@ -31,7 +31,7 @@ const page = async () => {
                   />
                 </svg>
               </span>
-              All Revinue
+              All Earnings
             </h1>
             <p className="text-gray-600 mt-1 ml-1">
               Total Transactions:{' '}
@@ -83,7 +83,7 @@ const page = async () => {
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm font-mono text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
-                        {payment.tranjectionId}
+                        {payment.transactionId}
                       </span>
                     </td>
                     <td className="px-6 py-4">

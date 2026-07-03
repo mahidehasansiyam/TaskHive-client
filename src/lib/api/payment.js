@@ -1,7 +1,7 @@
 import { serverFetch } from '../core/server';
 
 
-// GET all tasks
+// GET all payments
 export const getAllPayments = async () => {
   return serverFetch('/payments');
 };

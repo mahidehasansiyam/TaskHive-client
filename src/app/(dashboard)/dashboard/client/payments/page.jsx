@@ -85,7 +85,7 @@ const page = async () => {
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm font-mono text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
-                        {payment.tranjectionId}
+                        {payment.transactionId}
                       </span>
                     </td>
                     <td className="px-6 py-4">
