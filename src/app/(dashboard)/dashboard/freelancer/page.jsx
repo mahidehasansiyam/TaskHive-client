@@ -9,7 +9,7 @@ const FreelancerHomePAge = async () => {
   
   const user = await getUserSession();
 
-
+  //  GET proposal stats for the freelancer by freelancer email
   const { data } = await axios.get(
   `${process.env.NEXT_PUBLIC_SERVER_URL}/proposal-stats`,
   {

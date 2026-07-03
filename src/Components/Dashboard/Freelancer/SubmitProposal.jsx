@@ -112,10 +112,10 @@ const SubmitProposal = ({ task, isFreelancer, session }) => {
         </div>
 
         <h1 className="text-3xl font-bold text-gray-900 mb-8">{task.title}</h1>
-
+              {/* Grid  */}
         <div className="grid md:grid-cols-3 gap-8">
           {/* LEFT */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="md:col-span-2 space-y-6">
             {/* Description */}
             <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
               <h3 className="font-semibold text-gray-900 mb-3">Description</h3>

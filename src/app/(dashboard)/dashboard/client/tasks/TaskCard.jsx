@@ -12,8 +12,25 @@ import {
 } from 'react-icons/fa6';
 
 const TaskCard = ({ task, handleDelete }) => {
-  const isEditable = task.status?.toLowerCase() === 'open';
-  const isCompleted = task.status?.toLowerCase() === 'completed';
+  const status = task.status?.toLowerCase() || 'open';
+  console.log(task);
+
+  const isEditable = status === 'open';
+  const isCompleted = status === 'completed';
+
+  const statusStyles = {
+    open: 'bg-[#eff6ff] text-[#3b82f6] border-[#dbeafe]/40',
+
+    pending: 'bg-[#fef3c7] text-[#ca8a04] border-[#fde68a]/30',
+
+    'in progress': 'bg-[#fff7ed] text-[#ea580c] border-[#fed7aa]/30',
+
+    completed: 'bg-[#f0fdf4] text-[#16a34a] border-[#bbf7d0]/30',
+
+    accepted: 'bg-emerald-50 text-emerald-600 border-emerald-200',
+
+    rejected: 'bg-red-50 text-red-600 border-red-200',
+  };
 
   return (
     <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between hover:border-amber-100 transition-all group">
@@ -26,16 +43,13 @@ const TaskCard = ({ task, handleDelete }) => {
 
           <span
             className={`font-medium text-xs px-2.5 py-0.5 rounded-full border ${
-              isCompleted
-                ? 'bg-[#f0fdf4] text-[#16a34a] border-[#bbf7d0]/30'
-                : task.status?.toLowerCase() === 'in progress'
-                  ? 'bg-[#fef3c7] text-[#d97706] border-[#fde68a]/30'
-                  : 'bg-[#eff6ff] text-[#3b82f6] border-[#dbeafe]/40'
+              statusStyles[status] || statusStyles.open
             }`}
           >
-            {task.status
-              ? task.status.charAt(0).toUpperCase() + task.status.slice(1)
-              : 'Open'}
+            {status
+              .split(' ')
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ')}
           </span>
         </div>
 
@@ -75,13 +89,13 @@ const TaskCard = ({ task, handleDelete }) => {
           {isCompleted && (
             <span className="text-emerald-600 font-semibold flex items-center gap-1 bg-emerald-50/60 px-2 py-0.5 rounded-lg border border-emerald-100/50">
               <FaWallet size={12} className="shrink-0 text-emerald-500" />
-              Spend: ${task.proposed_budget}
+              Spend: ${task.proposed_budget ?? task.proposedBudget ?? 0}
             </span>
           )}
         </div>
       </div>
 
-      {/* Action row */}
+      {/* Action Row */}
       <div className="flex items-center justify-between gap-3 mt-6 pt-4 border-t border-gray-100">
         <Link
           href={`/dashboard/client/tasks/${task._id}`}

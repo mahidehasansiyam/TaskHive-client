@@ -58,7 +58,7 @@ export default async function Success({ searchParams }) {
 
     const paymentData = {
       ...metadata,
-      tranjectionId:paymentId,
+      transactionId:paymentId,
     };
     // console.log("Payment Data:",paymentData);
 
@@ -72,7 +72,7 @@ export default async function Success({ searchParams }) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            status: 'accepted',
+            status: 'in progress',
           }),
         },
       );
