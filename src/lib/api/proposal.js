@@ -21,6 +21,11 @@ export const getProposalsByClientEmail = async (email) => {
   return serverFetch(`/proposals?client_email=${email}`);
 };
 
+// GET proposals by freelancer email
+export const getProposalsByFreelancerEmails = async (email) => {
+  return serverFetch(`/proposals?freelancer_email=${email}`);
+};
+
 // GET proposal by proposal id
 export const getProposalById = async (id) => {
   return serverFetch(`/proposals/${id}`);

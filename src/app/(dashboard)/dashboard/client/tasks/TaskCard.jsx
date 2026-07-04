@@ -13,7 +13,7 @@ import {
 
 const TaskCard = ({ task, handleDelete }) => {
   const status = task.status?.toLowerCase() || 'open';
-  console.log(task);
+  // console.log(task);
 
   const isEditable = status === 'open';
   const isCompleted = status === 'completed';

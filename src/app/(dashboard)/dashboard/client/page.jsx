@@ -16,6 +16,7 @@ import ClientRecentTask from './ClientRecentTask';
 
 export default async function ClientDashboardPage() {
   const session = await getUserSession();
+
   
   // GET last 4 task by task id 
   const latestTasks = await getLatest4TasksByClientEmail(session.email);

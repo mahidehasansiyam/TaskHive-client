@@ -6,12 +6,9 @@ import { getAllTasksByClientEmail } from '@/lib/api/tasks';
 
 const page = async () => {
   const session = await getUserSession();
-  // console.log(session);
-
+  
   const clientEmail = session?.email;
-  // console.log("Client Email:", clientEmail);
-  // console.log(clientId);
-   
+  
    //  GET all task by client email 
   const tasks = await getAllTasksByClientEmail(clientEmail);
   // console.log(tasks);

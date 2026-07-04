@@ -202,7 +202,7 @@ const AllTasks = ({ tasks = [], filters = {}, total }) => {
 
       {/* Add Pagination */}
 
-      <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 bg-amber-100/50 rounded-xl px-4 py-3">
+      <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 bg-amber-100/50 rounded-xl px-4 py-3 font-bold">
         {/* Left side */}
         <div className="text-sm text-gray-500">
           Showing {startItem}-{endItem} of {totalItems} results
