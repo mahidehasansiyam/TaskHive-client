@@ -19,11 +19,11 @@ const AllTasks = ({ tasks = [], filters = {}, total }) => {
   const itemsPerPage = 12;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
- const getPageNumbers = () => {
+  const getPageNumbers = () => {
     const pages = [];
     pages.push(1);
     if (page > 3) {
-      pages.push("ellipsis");
+      pages.push('ellipsis');
     }
     const start = Math.max(2, page - 1);
     const end = Math.min(totalPages - 1, page + 1);
@@ -31,7 +31,7 @@ const AllTasks = ({ tasks = [], filters = {}, total }) => {
       pages.push(i);
     }
     if (page < totalPages - 2) {
-      pages.push("ellipsis");
+      pages.push('ellipsis');
     }
     pages.push(totalPages);
     return pages;
@@ -202,47 +202,62 @@ const AllTasks = ({ tasks = [], filters = {}, total }) => {
 
       {/* Add Pagination */}
 
-      <Pagination className="w-full">
-        <Pagination.Summary>
+      <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 bg-amber-100/50 rounded-xl px-4 py-3">
+        {/* Left side */}
+        <div className="text-sm text-gray-500">
           Showing {startItem}-{endItem} of {totalItems} results
-        </Pagination.Summary>
-        <Pagination.Content className="flex  flex-row justify-center items-center gap-2">
-          <Pagination.Item>
-            <Pagination.Previous
-              isDisabled={page === 1}
-              onPress={() => setPage(p => p - 1)}
-            >
-              <Pagination.PreviousIcon />
-              <span>Previous</span>
-            </Pagination.Previous>
-          </Pagination.Item>
-          {getPageNumbers().map((p, i) =>
-            p === 'ellipsis' ? (
-              <Pagination.Item key={`ellipsis-${i}`}>
-                <Pagination.Ellipsis />
-              </Pagination.Item>
-            ) : (
-              <Pagination.Item key={p}>
-                <Pagination.Link
-                  isActive={p === page}
-                  onPress={() => setPage(p)}
-                >
-                  {p}
-                </Pagination.Link>
-              </Pagination.Item>
-            ),
-          )}
-          <Pagination.Item>
-            <Pagination.Next
-              isDisabled={page === totalPages}
-              onPress={() => setPage(p => p + 1)}
-            >
-              <span>Next</span>
-              <Pagination.NextIcon />
-            </Pagination.Next>
-          </Pagination.Item>
-        </Pagination.Content>
-      </Pagination>
+        </div>
+
+        {/* Right side */}
+        <Pagination>
+          <Pagination.Content className="flex items-center gap-1">
+            <Pagination.Item>
+              <Pagination.Previous
+                isDisabled={page === 1}
+                onPress={() => setPage(p => p - 1)}
+                className="px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100"
+              >
+                ← Previous
+              </Pagination.Previous>
+            </Pagination.Item>
+
+            {getPageNumbers().map((p, i) =>
+              p === 'ellipsis' ? (
+                <Pagination.Item key={`ellipsis-${i}`}>
+                  <Pagination.Ellipsis />
+                </Pagination.Item>
+              ) : (
+                <Pagination.Item key={p}>
+                  <Pagination.Link
+                    isActive={p === page}
+                    onPress={() => setPage(p)}
+                    className={`
+          rounded-lg px-3 py-2
+          ${
+            p === page
+              ? 'bg-amber-500 text-white'
+              : 'text-gray-600 hover:bg-gray-100'
+          }
+        `}
+                  >
+                    {p}
+                  </Pagination.Link>
+                </Pagination.Item>
+              ),
+            )}
+
+            <Pagination.Item>
+              <Pagination.Next
+                isDisabled={page === totalPages}
+                onPress={() => setPage(p => p + 1)}
+                className="px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100"
+              >
+                Next →
+              </Pagination.Next>
+            </Pagination.Item>
+          </Pagination.Content>
+        </Pagination>
+      </div>
     </div>
   );
 };
