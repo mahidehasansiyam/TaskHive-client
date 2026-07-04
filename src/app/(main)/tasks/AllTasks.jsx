@@ -1,31 +1,64 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
+import { Pagination } from '@heroui/react';
 
-const AllTasks = ({ tasks = [] }) => {
+const AllTasks = ({ tasks = [], filters = {}, total }) => {
+  const [searchTerm, setSearchTerm] = useState(filters.search || '');
+  const [selectedCategory, setSelectedCategory] = useState(
+    filters.category || 'all',
+  );
+  const [page, setPage] = useState(filters.page || 1);
+
   const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
 
-  // Multi-tier search & category/status filtering system
-  const filteredTasks = useMemo(() => {
-    return tasks.filter(task => {
-      const matchesSearch =
-        task.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.description?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory =
-        selectedCategory === 'all' || task.category === selectedCategory;
-      const matchesStatus =
-        selectedStatus === 'all' ||
-        task.status?.toLowerCase() === selectedStatus.toLowerCase();
+  const totalItems = total;
+  const itemsPerPage = 12;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-      return matchesSearch && matchesCategory && matchesStatus;
-    });
-  }, [tasks, searchTerm, selectedCategory, selectedStatus]);
+ const getPageNumbers = () => {
+    const pages = [];
+    pages.push(1);
+    if (page > 3) {
+      pages.push("ellipsis");
+    }
+    const start = Math.max(2, page - 1);
+    const end = Math.min(totalPages - 1, page + 1);
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    if (page < totalPages - 2) {
+      pages.push("ellipsis");
+    }
+    pages.push(totalPages);
+    return pages;
+  };
+
+  const startItem = (page - 1) * itemsPerPage + 1;
+  const endItem = Math.min(page * itemsPerPage, totalItems);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams();
+
+    if (selectedCategory !== 'all') {
+      searchParams.set('category', selectedCategory);
+    }
+    if (searchTerm) {
+      searchParams.set('search', searchTerm);
+    }
+
+    if (page) {
+      searchParams.set('page', page);
+    }
+
+    const path = `?${searchParams.toString()}`;
+    router.push(path);
+
+    // console.log(searchParams.toString());
+  }, [router, searchTerm, selectedCategory, page]);
 
   return (
     <div className="max-w-6xl mx-auto pt-6 space-y-6 pb-12 px-4">
@@ -103,11 +136,11 @@ const AllTasks = ({ tasks = [] }) => {
 
       {/* Task Count Indicator */}
       <div className="text-[14px] text-gray-400 font-normal pt-1">
-        {filteredTasks.length} tasks found
+        {tasks.length} tasks found
       </div>
 
       {/* Primary Tasks Layout Grid (3 Columns Layout Matching Sample Images) */}
-      {filteredTasks.length === 0 ? (
+      {tasks.length === 0 ? (
         <div className="w-full bg-white rounded-2xl border border-gray-100 p-16 flex flex-col items-center justify-center text-center shadow-sm">
           <p className="text-gray-400 text-sm font-medium">
             No tasks found matching your filter criteria.
@@ -115,7 +148,7 @@ const AllTasks = ({ tasks = [] }) => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTasks.map(task => {
+          {tasks.map(task => {
             return (
               <Link
                 key={task._id}
@@ -166,6 +199,50 @@ const AllTasks = ({ tasks = [] }) => {
           })}
         </div>
       )}
+
+      {/* Add Pagination */}
+
+      <Pagination className="w-full">
+        <Pagination.Summary>
+          Showing {startItem}-{endItem} of {totalItems} results
+        </Pagination.Summary>
+        <Pagination.Content className="flex  flex-row justify-center items-center gap-2">
+          <Pagination.Item>
+            <Pagination.Previous
+              isDisabled={page === 1}
+              onPress={() => setPage(p => p - 1)}
+            >
+              <Pagination.PreviousIcon />
+              <span>Previous</span>
+            </Pagination.Previous>
+          </Pagination.Item>
+          {getPageNumbers().map((p, i) =>
+            p === 'ellipsis' ? (
+              <Pagination.Item key={`ellipsis-${i}`}>
+                <Pagination.Ellipsis />
+              </Pagination.Item>
+            ) : (
+              <Pagination.Item key={p}>
+                <Pagination.Link
+                  isActive={p === page}
+                  onPress={() => setPage(p)}
+                >
+                  {p}
+                </Pagination.Link>
+              </Pagination.Item>
+            ),
+          )}
+          <Pagination.Item>
+            <Pagination.Next
+              isDisabled={page === totalPages}
+              onPress={() => setPage(p => p + 1)}
+            >
+              <span>Next</span>
+              <Pagination.NextIcon />
+            </Pagination.Next>
+          </Pagination.Item>
+        </Pagination.Content>
+      </Pagination>
     </div>
   );
 };
