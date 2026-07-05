@@ -18,7 +18,7 @@ const Page = async ({ params }) => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <Link 
-              href="/dashboard" 
+              href="/dashboard/freelancer" 
               className="inline-flex items-center gap-2 text-sm font-medium text-[#00174d] hover:underline mb-3 group"
             >
               <FaArrowLeft className="text-xs group-hover:-translate-x-0.5 transition-transform" />

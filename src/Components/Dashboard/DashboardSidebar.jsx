@@ -208,7 +208,7 @@ export async function DashboardSidebar() {
       </aside>
 
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 px-4 flex items-center justify-between bg-white border-b border-gray-100 z-50">
+      <div className="md:hidden fixed bg-amber-300 top-0 left-0 right-0 h-16 px-4 flex items-center justify-between  border-b border-gray-100 z-50">
         <Drawer>
           <Drawer.Trigger asChild>
             <Button

@@ -36,13 +36,7 @@ const Freelancers = () => {
       .slice(0, 2);
   };
 
-  if (loading) {
-    return (
-      <div className="max-w-7xl h-screen flex items-center justify-center mx-auto px-8 py-12 text-gray-500 font-medium">
-        <BeatLoader color="#f59e0b"  size={20} />
-      </div>
-    );
-  }
+  
 
   return (
     <div className="max-w-6xl mx-auto px-8 py-12  min-h-screen font-sans">
