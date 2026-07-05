@@ -7,7 +7,7 @@ const page = async () => {
   const clientEmail = user?.email;
   
   const payments = await getPaymentsByEmail(clientEmail)
-  // console.log(payments.data);
+  console.log(payments.data);
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-8">
