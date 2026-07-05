@@ -1,10 +1,13 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FaLink, FaArrowRight } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 
 export default function SubmissionForm({ proposalId }) {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState({ error: false, text: '' });
 
@@ -36,6 +39,7 @@ export default function SubmissionForm({ proposalId }) {
       if (data.success) {
         toast.success('Task submitted successfully');
         setLoading(false);
+        router.push('/dashboard/freelancer');
       }
     } catch (error) {
       console.log(error);

@@ -12,8 +12,10 @@ import {
 } from 'react-icons/fa6';
 import { updateTask } from '@/lib/action/task';
 import { toast } from 'react-toastify';
+import ClientProposalsPage from '@/app/(dashboard)/dashboard/client/proposals/ClientProposalsPage';
 
-export default function TaskDetailsClient({ initialTask, taskId }) {
+
+export default async function TaskDetailsClient({ initialTask, taskId, proposals }) {
   const router = useRouter();
   const [task, setTask] = useState(initialTask);
   const [isEditing, setIsEditing] = useState(false);
@@ -22,8 +24,7 @@ export default function TaskDetailsClient({ initialTask, taskId }) {
   // Enforce condition: Edit option is only available when status is strictly 'open'
   const isEditable = task.status?.toLowerCase() === 'open';
 
-  
-  
+    
 
   // Process data updates via form submit
   const handleUpdate = async e => {
@@ -204,6 +205,10 @@ export default function TaskDetailsClient({ initialTask, taskId }) {
           </form>
         </div>
       )}
+
+      <div>
+        <ClientProposalsPage proposals={proposals} />
+      </div>
     </div>
   );
 }
