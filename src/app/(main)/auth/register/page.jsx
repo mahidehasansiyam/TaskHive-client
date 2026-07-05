@@ -405,7 +405,7 @@ export default function RegisterPage() {
         <p className="text-gray-400 font-medium text-sm text-center mt-6">
           Already have an account?{' '}
           <span
-            onClick={() => router.push('/login')}
+            onClick={() => router.push('/auth/login')}
             className="text-[#f59e0b] font-bold cursor-pointer hover:underline"
           >
             Sign in
