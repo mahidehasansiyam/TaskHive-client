@@ -57,7 +57,7 @@ export default async function TaskDetailsClient({ initialTask, taskId, proposals
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6 pb-12">
+    <div className="w-full max-w-6xl mx-auto space-y-6 pb-12">
       {/* Header Action Bar */}
       <div className="flex items-center gap-3">
         <button

@@ -10,64 +10,54 @@ const ClientProposalsPage = ({ session, proposals }) => {
   const [proposalsData, setProposalsData] = useState(proposals || []);
   const [loading, setLoading] = useState(null);
 
-  // Status mapping
   const getStatusInfo = status => {
     const statusMap = {
       accepted: {
         label: 'Accepted',
-        color: 'bg-green-100 text-green-800 border-green-300',
-        icon: <FaCheckCircle className="w-4 h-4 text-green-600" />,
+        color: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+        dot: 'bg-emerald-500',
+        icon: <FaCheckCircle className="w-3.5 h-3.5 text-emerald-500" />,
       },
-
       rejected: {
         label: 'Rejected',
-        color: 'bg-red-100 text-red-800 border-red-300',
-        icon: <FaTimesCircle className="w-4 h-4 text-red-600" />,
+        color: 'bg-red-50 text-red-700 border-red-200',
+        dot: 'bg-red-500',
+        icon: <FaTimesCircle className="w-3.5 h-3.5 text-red-500" />,
       },
-
       pending: {
-        label: 'Pending',
-        color: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-        icon: <FaClock className="w-4 h-4 text-yellow-600" />,
+        label: 'Pending Review',
+        color: 'bg-amber-50 text-amber-700 border-amber-200',
+        dot: 'bg-amber-400',
+        icon: <FaClock className="w-3.5 h-3.5 text-amber-500" />,
       },
-
       'in progress': {
         label: 'In Progress',
-        color: 'bg-blue-100 text-blue-800 border-blue-300',
-        icon: <FaClock className="w-4 h-4 text-blue-600" />,
+        color: 'bg-blue-50 text-blue-700 border-blue-200',
+        dot: 'bg-blue-500',
+        icon: <FaClock className="w-3.5 h-3.5 text-blue-500" />,
       },
     };
-
     return statusMap[status] || statusMap.pending;
   };
 
-  // Only pending shows buttons
   const isPending = status => status === 'pending';
 
-  // Currency format
-  const formatCurrency = amount => {
-    return new Intl.NumberFormat('en-US', {
+  const formatCurrency = amount =>
+    new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
     }).format(amount);
-  };
 
-  // Date format
-  const formatDate = dateString => {
-    const date = new Date(dateString);
-
-    return date.toLocaleDateString('en-US', {
+  const formatDate = dateString =>
+    new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
     });
-  };
 
-  // Accept
   const handleAccept = async proposalId => {
     setLoading(proposalId);
-
     try {
       router.push(`/dashboard/client/proposals/${proposalId}`);
     } catch (error) {
@@ -77,33 +67,21 @@ const ClientProposalsPage = ({ session, proposals }) => {
     }
   };
 
-  // Reject
   const handleReject = async proposalId => {
     setLoading(proposalId);
-
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/proposals/reject/${proposalId}`,
         {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            status: 'rejected',
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'rejected' }),
         },
       );
-
       if (response.ok) {
         setProposalsData(prev =>
-          prev.map(proposal =>
-            proposal._id === proposalId
-              ? {
-                  ...proposal,
-                  status: 'rejected',
-                }
-              : proposal,
+          prev.map(p =>
+            p._id === proposalId ? { ...p, status: 'rejected' } : p,
           ),
         );
       } else {
@@ -111,7 +89,6 @@ const ClientProposalsPage = ({ session, proposals }) => {
       }
     } catch (error) {
       console.error('Error rejecting proposal:', error);
-
       alert('An error occurred while rejecting proposal');
     } finally {
       setLoading(null);
@@ -119,97 +96,91 @@ const ClientProposalsPage = ({ session, proposals }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50/70 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My Proposals</h1>
-
-            <p className="text-sm text-gray-500 mt-1">
-              {proposalsData?.length || 0} proposals submitted
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+              Proposals
+            </h1>
+            <p className="text-sm text-gray-400 mt-0.5">
+              {proposalsData?.length || 0}{' '}
+              {proposalsData?.length === 1 ? 'proposal' : 'proposals'} received
             </p>
           </div>
         </div>
 
         {/* Proposal Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {proposalsData?.map(proposal => {
             const statusInfo = getStatusInfo(proposal.status);
-
             const isPendingStatus = isPending(proposal.status);
-
             const isLoading = loading === proposal._id;
 
             return (
               <div
                 key={proposal._id}
-                className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition overflow-hidden"
+                className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
               >
                 {/* Status Banner */}
                 <div
-                  className={`px-4 py-2 border-b ${statusInfo.color} flex items-center justify-between`}
+                  className={`px-5 py-3 border-b ${statusInfo.color} flex items-center justify-between`}
                 >
                   <div className="flex items-center gap-2">
                     {statusInfo.icon}
-
-                    <span className="font-medium text-sm">
+                    <span className="font-semibold text-xs tracking-wide uppercase">
                       {statusInfo.label}
                     </span>
                   </div>
-
-                  <span className="text-xs opacity-75">
+                  <span className="text-xs opacity-60 font-medium">
                     {formatDate(proposal.submitted_at)}
                   </span>
                 </div>
 
                 {/* Body */}
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3 truncate">
+                <div className="p-5">
+                  <h3 className="text-base font-semibold text-gray-900 mb-4 truncate">
                     {proposal.title}
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-gray-50 rounded-lg p-2">
-                      <div className="flex items-center gap-1 text-xs text-gray-500">
-                        <FiDollarSign />
-                        <span>Task Budget</span>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                      <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium uppercase tracking-wide mb-1">
+                        <FiDollarSign className="w-3 h-3" />
+                        Task Budget
                       </div>
-
-                      <p className="font-medium">
+                      <p className="font-semibold text-gray-800 text-sm">
                         {formatCurrency(proposal.Budget || 0)}
                       </p>
                     </div>
 
-                    <div className="bg-gray-50 rounded-lg p-2">
-                      <div className="flex items-center gap-1 text-xs text-gray-500">
-                        <FiCalendar />
-                        <span>Days</span>
+                    <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                      <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium uppercase tracking-wide mb-1">
+                        <FiCalendar className="w-3 h-3" />
+                        Timeline
                       </div>
-
-                      <p className="font-medium">
+                      <p className="font-semibold text-gray-800 text-sm">
                         {proposal.estimatedDays} days
                       </p>
                     </div>
 
-                    <div className="bg-gray-50 rounded-lg p-2">
-                      <div className="flex items-center gap-1 text-xs text-gray-500">
-                        <FiFileText />
-                        <span>Proposed Budget</span>
+                    <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                      <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium uppercase tracking-wide mb-1">
+                        <FiFileText className="w-3 h-3" />
+                        Proposed Budget
                       </div>
-
-                      <p className="font-medium">
+                      <p className="font-semibold text-gray-800 text-sm">
                         {formatCurrency(proposal.proposedBudget)}
                       </p>
                     </div>
 
-                    <div className="bg-gray-50 rounded-lg p-2">
-                      <div className="flex items-center gap-1 text-xs text-gray-500">
-                        <FiUser />
-                        <span>Freelancer</span>
+                    <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                      <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium uppercase tracking-wide mb-1">
+                        <FiUser className="w-3 h-3" />
+                        Freelancer
                       </div>
-
-                      <p className="truncate font-medium">
+                      <p className="truncate font-semibold text-gray-800 text-sm">
                         {proposal.freelancer_email}
                       </p>
                     </div>
@@ -217,33 +188,32 @@ const ClientProposalsPage = ({ session, proposals }) => {
 
                   {/* Cover Note */}
                   {proposal.coverNote && (
-                    <div className="mt-3 border-t pt-3">
-                      <p className="text-sm text-gray-500 line-clamp-2">
-                        {proposal.coverNote}
+                    <div className="mt-4 p-3 bg-blue-50/50 border border-blue-100 rounded-xl">
+                      <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                        "{proposal.coverNote}"
                       </p>
                     </div>
                   )}
 
-                  {/* Task Id */}
-                  <div className="mt-3 text-xs text-gray-400">
-                    Task ID: {proposal.task_id?.slice(-8)}
+                  {/* Task ID */}
+                  <div className="mt-3 text-[11px] text-gray-300 font-mono">
+                    #{proposal.task_id?.slice(-8)}
                   </div>
 
-                  {/* Buttons */}
+                  {/* Action Buttons */}
                   {isPendingStatus && (
-                    <div className="mt-4 pt-4 border-t flex gap-3">
+                    <div className="mt-4 pt-4 border-t border-gray-100 flex gap-2.5">
                       <button
                         onClick={() => handleAccept(proposal._id)}
                         disabled={isLoading}
-                        className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg"
+                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold py-2.5 rounded-xl transition-all duration-150"
                       >
-                        Accept & Pay
+                        {isLoading ? 'Processing…' : 'Accept & Pay'}
                       </button>
-
                       <button
                         onClick={() => handleReject(proposal._id)}
                         disabled={isLoading}
-                        className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg"
+                        className="flex-1 bg-white hover:bg-red-50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-red-600 text-sm font-semibold py-2.5 rounded-xl border border-red-200 hover:border-red-300 transition-all duration-150"
                       >
                         Reject
                       </button>
@@ -257,12 +227,16 @@ const ClientProposalsPage = ({ session, proposals }) => {
 
         {/* Empty State */}
         {proposalsData.length === 0 && (
-          <div className="text-center py-16">
-            <FiFileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-
-            <h3 className="text-lg font-medium">No proposals yet</h3>
-
-            <p className="text-sm text-gray-500">No proposals available</p>
+          <div className="text-center py-20">
+            <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <FiFileText className="w-7 h-7 text-gray-300" />
+            </div>
+            <h3 className="text-base font-semibold text-gray-700 mb-1">
+              No proposals yet
+            </h3>
+            <p className="text-sm text-gray-400">
+              Proposals submitted for your tasks will appear here.
+            </p>
           </div>
         )}
       </div>
