@@ -62,13 +62,7 @@ export default function PostTaskPage() {
     }
   };
 
-  if (isPending) {
-    return (
-      <div className="max-w-7xl h-screen flex items-center justify-center mx-auto px-8 py-12">
-        <BeatLoader color="#f59e0b" size={20} />
-      </div>
-    );
-  }
+  
 
   return (
     <div className="w-full max-w-4xl mx-auto pb-12">

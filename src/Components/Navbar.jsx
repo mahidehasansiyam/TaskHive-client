@@ -63,6 +63,7 @@ export default function Navbar() {
             <li key={link.href}>
               <Link
                 href={link.href}
+                prefetch={true}
                 className="text-[14px] font-semibold text-gray-600 hover:text-[#f59e0b]"
               >
                 {link.label}
@@ -80,7 +81,6 @@ export default function Navbar() {
               {/* Fast Dashboard Link */}
               <Link
                 href={dashboardRoute}
-                prefetch={true}
                 className="text-[#555] hover:text-[#f59e0b] text-sm font-semibold flex items-center gap-2"
               >
                 <CiGrid42 />
@@ -108,7 +108,7 @@ export default function Navbar() {
               </Link>
 
               <Link href="/auth/register">
-                <Button className="bg-gradient-to-r from-[#f39c12] to-[#e67e22] text-white font-bold">
+                <Button className="bg-gradient-to-r from-[#f39c12] to-[#e67e22] text-white font-bold p-2 rounded-lg hover:from-[#e67e22] hover:to-[#f39c12]">
                   Get Started
                 </Button>
               </Link>
@@ -133,7 +133,6 @@ export default function Navbar() {
           {session && (
             <Link
               href={dashboardRoute}
-              prefetch={true}
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 text-amber-700 font-bold"
             >
