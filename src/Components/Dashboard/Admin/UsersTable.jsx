@@ -38,37 +38,63 @@ const FilterIcon = () => (
 );
 
 const UsersTable = ({ users = [] }) => {
-  const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState('all');
   const router = useRouter();
 
+  // Local state for users
+  const [localUsers, setLocalUsers] = useState(users);
+
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('all');
+
   const filteredUsers = useMemo(() => {
-    return users.filter(user => {
+    return localUsers.filter(user => {
       const roleMatch =
         filter === 'all' ? true : user.role?.toLowerCase() === filter;
+
       const searchMatch =
         user.name?.toLowerCase().includes(search.toLowerCase()) ||
         user.email?.toLowerCase().includes(search.toLowerCase());
+
       return roleMatch && searchMatch;
     });
-  }, [users, search, filter]);
+  }, [localUsers, search, filter]);
 
   const handleBlockStatus = async (id, status) => {
+    // Save previous state for rollback
+    const previousUsers = [...localUsers];
+
+    // Update instantly
+    setLocalUsers(prev =>
+      prev.map(user =>
+        user._id === id ? { ...user, isBlocked: status } : user,
+      ),
+    );
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${id}`,
         {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ isBlocked: status }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            isBlocked: status,
+          }),
         },
       );
+
       const data = await response.json();
-      if (data.success) {
-        router.refresh();
+
+      if (!data.success) {
+        // Rollback if API fails
+        setLocalUsers(previousUsers);
       }
     } catch (error) {
       console.error(error);
+
+      // Rollback on error
+      setLocalUsers(previousUsers);
     }
   };
 
