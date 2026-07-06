@@ -13,8 +13,9 @@ const FreelancerDashboardStats = ({ stats }) => {
     totalProposals: 0,
     pending: 0,
     accepted: 0,
-    totalEarned: 0,
+    totalEarning: 0,
   };
+  // console.log("Total Earning",totalEarning);
 
   return (
     <div className="max-w-7xl mx-auto px-1 md:px-8 py-10 bg-white font-sans">
@@ -78,7 +79,7 @@ const FreelancerDashboardStats = ({ stats }) => {
         </div>
 
         {/* Card 3: Accepted Proposals */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] flex justify-between items-start">
+        {/* <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] flex justify-between items-start">
           <div className="space-y-1">
             <span className="block text-sm text-gray-400 font-bold tracking-wide">
               Accepted
@@ -93,7 +94,7 @@ const FreelancerDashboardStats = ({ stats }) => {
           <div className="w-12 h-12 rounded-xl bg-[#fff4e6] flex items-center justify-center shrink-0 text-[#ea7a02]">
             <FaRegCheckCircle className="text-xl stroke-[2]" />
           </div>
-        </div>
+        </div> */}
 
         {/* Card 3: Rejected Proposals */}
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] flex justify-between items-start">
@@ -120,7 +121,7 @@ const FreelancerDashboardStats = ({ stats }) => {
               Total Earned
             </span>
             <span className="block text-4xl font-extrabold text-gray-900">
-              ${dynamicStats.totalEarned}
+              ${dynamicStats.totalEarning}
             </span>
             <span className="block text-xs text-gray-400 font-medium pt-1">
               From completed tasks

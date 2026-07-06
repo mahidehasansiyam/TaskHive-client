@@ -17,16 +17,18 @@ const FreelancerHomePAge = async () => {
       freelancer_email: user?.email
     }
   }
-);
+  );
+  
+  console.log("data",data);
 
 
 const dashboardData = {
-    totalProposals: data.totalProposal,
-    pending: data.totalPending,
-    accepted: data.totalAccepted,
-    totalEarned: data.totalEarning,
-    totalRejected: data.totalRejected,
-  };
+  totalProposals: data.totalProposal,
+  pending: data.totalPending,
+  accepted: data.totalAccepted,
+  totalEarning: data.totalEarning,
+  totalRejected: data.totalRejected,
+};
   // console.log(dashboardData);
 
   

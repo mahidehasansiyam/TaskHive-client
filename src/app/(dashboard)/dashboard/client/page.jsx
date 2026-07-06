@@ -41,7 +41,7 @@ export default async function ClientDashboardPage() {
        }
 
        // Total spend
-       acc.totalSpent += task.budget || 0;
+       acc.totalSpent += task.proposed_budget || 0;
 
        return acc;
      },
