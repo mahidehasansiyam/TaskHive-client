@@ -51,7 +51,7 @@ const AdminHomePage = async () => {
       {/* Header */}
 
       <div className="mb-10">
-        <h1 className="text-5xl font-bold text-slate-800">Admin Dashboard</h1>
+        <h1 className="text-3xl md:text-5xl font-bold text-slate-800">Admin Dashboard</h1>
 
         <p className="text-gray-500 mt-3 text-lg">
           Monitor platform statistics and activity

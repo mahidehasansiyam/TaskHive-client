@@ -208,7 +208,7 @@ export async function DashboardSidebar() {
       </aside>
 
       {/* Mobile Header */}
-      <div className="md:hidden fixed  top-0 left-0 right-0 h-16 px-4 flex items-center justify-between  border-b border-gray-100 z-50">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 px-4 flex items-center justify-between border-b border-gray-100 z-50 bg-white/70 backdrop-blur-md">
         <Drawer>
           <Drawer.Trigger asChild>
             <Button
@@ -245,9 +245,8 @@ export async function DashboardSidebar() {
         </span>
       </div>
 
-      {/* Spacer */}
+      {/* Spacer — only pushes content down if the parent layout stacks vertically on mobile (flex-col md:flex-row). See note below. */}
       <div className="h-16 md:hidden shrink-0" />
     </>
   );
 }
-
