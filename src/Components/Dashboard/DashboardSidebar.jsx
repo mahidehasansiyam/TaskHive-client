@@ -246,7 +246,7 @@ export async function DashboardSidebar() {
       </div>
 
       {/* Spacer */}
-      <div className="w-full h-16 md:hidden" />
+      <div className="h-16 md:hidden shrink-0" />
     </>
   );
 }

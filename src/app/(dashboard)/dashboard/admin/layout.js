@@ -1,5 +1,5 @@
+import { requireRole } from "@/lib/core/session";
 
-import { requireRole } from '@/lib/core/session';
 
 
 const AdminLayout = async ({ children }) => {
