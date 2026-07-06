@@ -4,11 +4,10 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
-
-/* ICONS */
+/* ── Icons ── */
 const MailIcon = () => (
   <svg
-    className="w-4 h-4"
+    className="w-3.5 h-3.5"
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
@@ -21,7 +20,6 @@ const MailIcon = () => (
     />
   </svg>
 );
-
 const EditIcon = () => (
   <svg
     className="w-4 h-4"
@@ -37,10 +35,9 @@ const EditIcon = () => (
     />
   </svg>
 );
-
 const SaveIcon = () => (
   <svg
-    className="w-5 h-5"
+    className="w-4 h-4"
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
@@ -53,10 +50,9 @@ const SaveIcon = () => (
     />
   </svg>
 );
-
 const XIcon = () => (
   <svg
-    className="w-4 h-4"
+    className="w-3.5 h-3.5"
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
@@ -64,347 +60,367 @@ const XIcon = () => (
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth="2"
+      strokeWidth="2.5"
       d="M6 18L18 6M6 6l12 12"
     />
   </svg>
 );
 
-/* COMPONENT */
+/* ── Component ── */
 const Profile = ({ user }) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
-  // Form State
   const [formData, setFormData] = useState({
-    // name: user?.name || '',
     image: user?.image || '',
-    bio: user?.bio || '...',
+    bio: user?.bio || '',
     hourlyRate: user?.hourlyRate || 0,
   });
-  
 
-  const [skills, setSkills] = useState(user?.skills || ['React', 'Next.js']);
+  const [skills, setSkills] = useState(user?.skills || []);
   const [newSkill, setNewSkill] = useState('');
 
-  // Handle Changes
   const handleInputChange = e => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-
   const addSkill = () => {
-    if (newSkill.trim() && !skills.includes(newSkill.trim())) {
-      setSkills([...skills, newSkill.trim()]);
+    const trimmed = newSkill.trim();
+    if (trimmed && !skills.includes(trimmed)) {
+      setSkills([...skills, trimmed]);
       setNewSkill('');
     }
   };
 
-   const handleReload = () => {
-     router.refresh();
-   };
+  const removeSkill = skill => setSkills(skills.filter(s => s !== skill));
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log('Form data', formData);
-    const updatedData = {
-      ...formData,
-      hourlyRate: Number(formData.hourlyRate),
-      skills,
-      email: user.email,
-    };
-    console.log('Updated data', updatedData);
-    
-    
-
-   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/user/update`, {
-     method: 'PATCH',
-     headers: {
-       'Content-Type': 'application/json',
-     },
-     body: JSON.stringify(updatedData),
-   });
-
-    const result = await res.json();
-    // console.log(result);
-   if(result.success) {
-     toast.success('Profile updated successfully!');
-     setIsModalOpen(false);
-   }
+    setIsSaving(true);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/update`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            hourlyRate: Number(formData.hourlyRate),
+            skills,
+            email: user.email,
+          }),
+        },
+      );
+      const result = await res.json();
+      if (result.success) {
+        toast.success('Profile saved!');
+        setIsModalOpen(false);
+        router.refresh();
+      }
+    } finally {
+      setIsSaving(false);
+    }
   };
 
+  const initials =
+    user?.name
+      ?.split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) || 'U';
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8 min-h-screen bg-slate-50/50">
-      {/* 1. HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 pb-6 border-b border-slate-200/60">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-            My Profile
-          </h1>
-          <p className="text-slate-500 mt-1.5 text-sm sm:text-base font-medium">
-            Manage your professional digital presence
-          </p>
+    <div className="min-h-screen bg-slate-50 px-1 py-8 sm:px-1 sm:py-12">
+      <div className="max-w-3xl mx-auto">
+        {/* ── Page header ── */}
+        <div className="flex items-start justify-between mb-8">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              My Profile
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Manage your professional digital presence
+            </p>
+          </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 bg-[#f07300] hover:bg-[#d86500] active:scale-95 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm shadow-orange-200 transition-all duration-150 shrink-0 ml-4"
+          >
+            <EditIcon />
+            <span className="hidden sm:inline">Edit Profile</span>
+            <span className="sm:hidden">Edit</span>
+          </button>
         </div>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="group bg-[#f07300] hover:bg-[#d66600] text-white px-5 py-3 rounded-xl flex items-center gap-2.5 font-semibold shadow-md shadow-orange-500/10 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-200 active:scale-98"
-        >
-          <span className="transition-transform group-hover:rotate-12 duration-200">
-            <EditIcon />
-          </span>
-          Edit Profile
-        </button>
+        {/* Profile card — remove overflow-hidden */}
+<div className="bg-white rounded-3xl border border-slate-100 shadow-sm">  {/* ← no overflow-hidden */}
+
+  {/* Banner */}
+  <div className="h-36 sm:h-48 bg-gradient-to-br from-orange-400 via-[#f07300] to-amber-500 relative rounded-t-3xl">
+    <div className="absolute inset-0 opacity-20 rounded-t-3xl"
+      style={{ backgroundImage: 'radial-gradient(circle at 70% 30%, white 0%, transparent 60%)' }}
+    />
+  </div>
+
+  {/* Body */}
+  <div className="px-5 sm:px-8 pb-8">
+
+    {/* Avatar row */}
+    <div className="flex items-end justify-between -mt-12 sm:-mt-16 mb-5">
+      <div className="relative z-10 w-24 h-24 sm:w-32 sm:h-32 rounded-2xl border-4 border-white shadow-lg overflow-hidden bg-orange-50 flex items-center justify-center shrink-0">
+        {formData.image ? (
+          <img src={formData.image} alt={user?.name} className="w-full h-full object-cover" />
+        ) : (
+          <span className="text-2xl sm:text-3xl font-black text-orange-400">{initials}</span>
+        )}
       </div>
 
-      {/* 2. PROFILE CARD (PREVIEW) */}
-      <div className="bg-white rounded-3xl border border-slate-200/70 shadow-sm shadow-slate-100/50 overflow-hidden mb-8 transition-all duration-300 hover:shadow-md">
-        <div className="h-48 bg-gradient-to-r from-orange-400 via-[#f07300] to-amber-500 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
-        </div>
-        <div className="px-6 sm:px-10 pb-10 relative">
-          <div className="-mt-20 flex flex-col md:flex-row gap-6 md:gap-8 items-start">
-            {/* Avatar */}
-            <div className="bg-white rounded-2xl p-1.5 shadow-xl shadow-slate-200/80 w-36 h-36 flex items-center justify-center overflow-hidden ring-4 ring-white/50 group transition-transform duration-300 hover:scale-[1.02]">
-              {formData.image ? (
-                <img
-                  src={user.image}
-                  alt={user.name}
-                  className="w-full h-full object-cover rounded-xl"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center text-4xl font-black text-slate-400 rounded-xl">
-                  {user.name.charAt(0)}
-                </div>
-              )}
-            </div>
+      {/* Hourly rate */}
+      <div className="mb-1 text-right">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hourly Rate</p>
+        <p className="text-2xl sm:text-3xl font-black text-[#f07300] leading-tight">
+          ${formData.hourlyRate}
+          <span className="text-xs font-semibold text-slate-400 ml-0.5">/hr</span>
+        </p>
+      </div>
+    </div>
 
-            {/* Info */}
-            <div className="flex-1 pt-4 md:pt-24 w-full">
-              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
-                <div className="space-y-2">
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                    {formData.name}
-                  </h2>
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-600 rounded-xl text-sm font-medium border border-slate-100">
-                    <span className="text-slate-400">
-                      <MailIcon />
-                    </span>
-                    {user?.email || 'freelance@taskhive.com'}
-                  </div>
-                </div>
 
-                <div className="bg-gradient-to-br from-slate-50 to-white p-5 rounded-2xl border border-slate-200/60 min-w-[180px] shadow-sm lg:text-right">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-                    Hourly Rate
-                  </p>
-                  <p className="text-3xl font-black text-[#f07300] tracking-tight">
-                    ${formData.hourlyRate}
-                    <span className="text-sm font-semibold text-slate-400 ml-1">
-                      /hr
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-8 pt-8 border-t border-slate-100 space-y-8">
-                <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
-                    About Me
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed max-w-3xl text-base font-normal">
-                    {formData.bio}
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
-                    Skills & Expertises
-                  </h3>
-                  <div className="flex flex-wrap gap-2.5">
-                    {skills.map((s, i) => (
-                      <span
-                        key={i}
-                        className="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-sm font-semibold border border-slate-200/50 transition-colors duration-150"
-                      >
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+            {/* Name + email */}
+            <div className="mb-6">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight mb-1.5">
+                {user?.name}
+              </h2>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-xl text-slate-500 text-xs font-medium">
+                <MailIcon />
+                {user?.email}
               </div>
             </div>
+
+            {/* Divider */}
+            <div className="border-t border-slate-100 mb-6" />
+
+            {/* About */}
+            <div className="mb-6">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+                About Me
+              </p>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                {formData.bio || (
+                  <span className="text-slate-300 italic">
+                    No bio yet — click Edit Profile to add one.
+                  </span>
+                )}
+              </p>
+            </div>
+
+            {/* Skills */}
+            {skills.length > 0 && (
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
+                  Skills & Expertise
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {skills.map((s, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs sm:text-sm font-semibold"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* 3. EDIT MODAL */}
+      {/* ── Edit Modal ── */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-slate-950/40 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-all duration-300">
-          <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl border border-slate-100 flex flex-col animate-in fade-in zoom-in-95 duration-200">
-            {/* Modal Header */}
-            <div className="p-6 sm:p-8 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-10">
+        <div
+          className="fixed inset-0 bg-slate-950/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4"
+          onClick={e => e.target === e.currentTarget && setIsModalOpen(false)}
+        >
+          <div className="bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-100 flex flex-col max-h-[92vh] sm:max-h-[88vh]">
+            {/* Modal header */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 shrink-0">
+              {/* Drag handle on mobile */}
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-slate-200 rounded-full sm:hidden" />
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                <h2 className="text-lg font-bold text-slate-900">
                   Edit Profile
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
-                  Update your professional details and layout options
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Update your professional details
                 </p>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 hover:bg-slate-100 rounded-xl transition-all text-slate-400 hover:text-slate-600 active:scale-95"
+                className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
               >
                 <XIcon />
               </button>
             </div>
 
-            {/* Modal Form */}
-            <form
-              onSubmit={handleSubmit}
-              className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 bg-slate-50/50"
-            >
-              <div className="space-y-6">
-                {/* 2-COLUMN INPUT GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  {/* Profile Photo Link Field */}
-                  <div className="flex flex-col gap-2 md:col-span-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                      Profile Photo Link
-                    </label>
-                    <div className="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 py-3 transition-all focus-within:border-[#f07300] focus-within:ring-4 focus-within:ring-orange-500/5 shadow-sm">
-                      <input
-                        name="image"
-                        value={formData.image}
-                        onChange={handleInputChange}
-                        className="w-full bg-transparent text-slate-900 text-sm outline-none placeholder-slate-400 pr-8"
-                        placeholder="https://example.com/avatar.jpg"
+            {/* Scrollable form body */}
+            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto">
+              <div className="px-6 py-5 space-y-5">
+                {/* Photo URL */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    Profile Photo URL
+                  </label>
+                  <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus-within:border-[#f07300] focus-within:bg-white focus-within:ring-2 focus-within:ring-orange-100 transition-all">
+                    <input
+                      name="image"
+                      value={formData.image}
+                      onChange={handleInputChange}
+                      className="flex-1 bg-transparent text-sm text-slate-800 outline-none placeholder-slate-400 min-w-0"
+                      placeholder="https://example.com/photo.jpg"
+                    />
+                    {formData.image && (
+                      <img
+                        src={formData.image}
+                        alt=""
+                        className="w-7 h-7 rounded-lg object-cover shrink-0 border border-slate-200"
                       />
-                      {formData.image && (
-                        <div className="absolute right-3.5 w-6 h-6 rounded-md overflow-hidden border border-slate-100 shadow-sm flex-shrink-0">
-                          <img
-                            src={formData.image}
-                            alt="Preview"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Hourly Rate Field */}
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                      Hourly Rate (USD)
-                    </label>
-                    <div className="flex items-center bg-white border border-slate-200 rounded-xl px-3.5 py-3 transition-all focus-within:border-[#f07300] focus-within:ring-4 focus-within:ring-orange-500/5 shadow-sm">
-                      <span className="text-slate-400 font-medium text-sm mr-1.5 select-none">
-                        $
-                      </span>
-                      <input
-                        type="number"
-                        name="hourlyRate"
-                        value={formData.hourlyRate}
-                        onChange={handleInputChange}
-                        className="w-full bg-transparent text-slate-900 text-sm outline-none font-semibold"
-                        placeholder="0"
-                      />
-                      <span className="text-slate-400 font-medium text-xs ml-1.5 select-none whitespace-nowrap">
-                        / hr
-                      </span>
-                    </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Bio Textarea Field */}
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    Bio Description
+                {/* Hourly rate */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    Hourly Rate (USD)
+                  </label>
+                  <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus-within:border-[#f07300] focus-within:bg-white focus-within:ring-2 focus-within:ring-orange-100 transition-all">
+                    <span className="text-slate-400 text-sm mr-2 select-none">
+                      $
+                    </span>
+                    <input
+                      type="number"
+                      name="hourlyRate"
+                      value={formData.hourlyRate}
+                      onChange={handleInputChange}
+                      className="flex-1 bg-transparent text-sm font-semibold text-slate-800 outline-none"
+                      placeholder="0"
+                      min="0"
+                    />
+                    <span className="text-slate-400 text-xs ml-2 select-none">
+                      /hr
+                    </span>
+                  </div>
+                </div>
+
+                {/* Bio */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    Bio
                   </label>
                   <textarea
                     name="bio"
-                    defaultValue={formData.bio}
+                    value={formData.bio}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full bg-white text-slate-900 border border-slate-200 rounded-xl p-4 text-sm focus:border-[#f07300] focus:ring-4 focus:ring-orange-500/5 transition-all outline-none shadow-sm resize-none leading-relaxed placeholder-slate-400"
-                    placeholder="Tell clients about your expertise, background, and what drives your execution workflow..."
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:border-[#f07300] focus:bg-white focus:ring-2 focus:ring-orange-100 outline-none transition-all resize-none placeholder-slate-400 leading-relaxed"
+                    placeholder="Tell clients about your background and expertise..."
                   />
                 </div>
 
-                {/* Skills Container Field */}
-                <div className="flex flex-col gap-4">
+                {/* Skills */}
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <label className="text-sm font-semibold text-slate-700">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                       Skills & Tags
                     </label>
-
-                    <span className="text-xs px-2.5 py-1 rounded-full bg-orange-50 text-[#f07300] font-medium">
-                      {skills.length} skills
+                    <span className="text-xs font-semibold text-orange-500 bg-orange-50 px-2.5 py-1 rounded-full">
+                      {skills.length} added
                     </span>
                   </div>
 
-                  {/* Skills Container */}
-                  <div className="bg-gradient-to-br from-slate-50 to-white border border-slate-200 rounded-2xl p-4 min-h-[90px] shadow-sm">
-                    {skills.length > 0 ? (
-                      <div className="flex flex-wrap gap-3">
-                        {skills.map((s, i) => (
-                          <div
-                            key={i}
-                            className="group flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-200 text-sm font-medium text-slate-700 shadow-sm hover:shadow-md transition-all"
+                  {/* Skills pills */}
+                  {skills.length > 0 && (
+                    <div className="flex flex-wrap gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl min-h-[52px]">
+                      {skills.map((s, i) => (
+                        <span
+                          key={i}
+                          className="flex items-center gap-1.5 pl-3 pr-2 py-1.5 bg-white border border-slate-200 rounded-full text-xs font-semibold text-slate-700 shadow-sm"
+                        >
+                          {s}
+                          <button
+                            type="button"
+                            onClick={() => removeSkill(s)}
+                            className="w-4 h-4 flex items-center justify-center rounded-full text-slate-300 hover:bg-red-50 hover:text-red-400 transition-colors"
                           >
-                            <span>{s}</span>
+                            <XIcon />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
-                            <button
-                              type="button"
-                              onClick={() => removeSkill(s)}
-                              className="w-5 h-5 flex items-center justify-center rounded-full text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all"
-                            >
-                              <XIcon />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="h-full flex items-center justify-center text-sm text-slate-400">
-                        Add skills like React, UI/UX, TypeScript, Marketing...
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Input Section */}
-                  <div className="flex gap-3">
+                  {/* Add skill input */}
+                  <div className="flex gap-2">
                     <input
                       value={newSkill}
                       onChange={e => setNewSkill(e.target.value)}
                       onKeyDown={e =>
                         e.key === 'Enter' && (e.preventDefault(), addSkill())
                       }
-                      placeholder="Type a skill..."
-                      className="flex-1 px-5 py-3.5 rounded-2xl bg-white border border-slate-200 text-sm focus:border-[#f07300] focus:ring-4 focus:ring-orange-100 outline-none transition-all shadow-sm"
+                      placeholder="e.g. React, UI/UX, TypeScript..."
+                      className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-[#f07300] focus:bg-white focus:ring-2 focus:ring-orange-100 outline-none transition-all placeholder-slate-400"
                     />
-
                     <button
                       type="button"
                       onClick={addSkill}
-                      className="px-6 rounded-2xl bg-[#f07300] hover:bg-[#d86500] text-white font-semibold flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95"
+                      className="px-5 py-3 bg-[#f07300] hover:bg-[#d86500] active:scale-95 text-white text-sm font-bold rounded-xl transition-all shrink-0"
                     >
-                      <span className="text-lg">+</span>
-                      Add
+                      + Add
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Sticky Footer Action Bar */}
-              <div className="pt-4 pb-1 mt-4 border-t border-slate-100 sticky bottom-0 bg-gradient-to-t from-slate-50 via-slate-50/95 to-transparent backdrop-blur-sm -mx-6 sm:-mx-8 px-6 sm:px-8 z-20">
+              {/* Sticky save button */}
+              <div className="px-6 pb-6 pt-3 border-t border-slate-100 shrink-0 bg-white">
                 <button
                   type="submit"
-                  onClick={handleReload}
-                  className="w-full bg-[#f07300] hover:bg-[#d66600] text-white p-4 rounded-xl flex justify-center items-center gap-2.5 font-bold shadow-lg shadow-orange-500/10 hover:shadow-orange-500/20 transition-all duration-200 active:scale-[0.99]"
+                  disabled={isSaving}
+                  className="w-full flex items-center justify-center gap-2 bg-[#f07300] hover:bg-[#d86500] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl shadow-sm shadow-orange-200 transition-all duration-150 text-sm"
                 >
-                  <SaveIcon /> Save Profile Changes
+                  {isSaving ? (
+                    <>
+                      <svg
+                        className="animate-spin w-4 h-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v8z"
+                        />
+                      </svg>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <SaveIcon />
+                      Save Profile Changes
+                    </>
+                  )}
                 </button>
               </div>
             </form>

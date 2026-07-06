@@ -61,7 +61,7 @@ const AllTasks = ({ tasks = [], filters = {}, total }) => {
   }, [router, searchTerm, selectedCategory, page]);
 
   return (
-    <div className="max-w-6xl mx-auto pt-6 space-y-6 pb-12 px-4">
+    <div className="max-w-6xl mx-auto pt-6 space-y-6 pb-12 px-1">
       {/* Header Panel Section */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">

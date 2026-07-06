@@ -27,7 +27,7 @@ const FreelancerDetails = async ({ params }) => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-8 py-12  min-h-screen font-sans">
+    <div className="max-w-6xl mx-auto px-1 md:px-8 py-12  min-h-screen font-sans">
       {/* Top Identity Header Row */}
       <div className="flex items-center gap-6 mb-10">
         {/* Rounded Mint Avatar Container */}

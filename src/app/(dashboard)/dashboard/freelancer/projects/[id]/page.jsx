@@ -11,7 +11,7 @@ const Page = async ({ params }) => {
   
 
   return (
-    <div className="min-h-screen bg-[#f4f7fa] text-[#00174d] antialiased p-4 sm:p-6 lg:p-10">
+    <div className="min-h-screen bg-[#f4f7fa] text-[#00174d] antialiased p-1 sm:p-6 lg:p-10">
       <div className="max-w-6xl mx-auto">
         
         {/* Header Section */}

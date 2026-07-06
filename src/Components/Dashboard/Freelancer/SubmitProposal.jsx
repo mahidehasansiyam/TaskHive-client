@@ -104,8 +104,8 @@ const SubmitProposal = ({
   const disableForm = loading || isBlocked || hasAlreadySubmitted;
 
   return (
-    <div className="bg-gray-50 min-h-screen p-12">
-      <div className="max-w-6xl mx-auto px-4">
+    <div className="bg-gray-50 min-h-screen p-1 md:p-12">
+      <div className="max-w-6xl mx-auto px-1">
         {/* badges */}
 
         <div className="flex items-center gap-3 mb-3">

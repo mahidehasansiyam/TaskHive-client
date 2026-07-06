@@ -17,7 +17,7 @@ const FreelancerDashboardStats = ({ stats }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-8 py-10 bg-white font-sans">
+    <div className="max-w-7xl mx-auto px-1 md:px-8 py-10 bg-white font-sans">
       {/* Dashboard Top Header Control Row */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
         <div>

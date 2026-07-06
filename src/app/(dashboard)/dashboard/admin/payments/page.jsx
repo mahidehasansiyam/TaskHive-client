@@ -5,62 +5,58 @@ const Page = async () => {
   const allPayments = await getAllPayments();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-1 sm:p-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </span>
-              All Payments
-            </h1>
-            <p className="text-gray-600 mt-1 ml-1">
-              Total Transactions:{' '}
-              <span className="font-semibold text-gray-800">
-                {allPayments?.data?.length || 0}
-              </span>
-            </p>
-          </div>
+        {/* Header */}
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 flex items-center gap-3">
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg shrink-0">
+              <svg
+                className="w-5 h-5 sm:w-6 sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </span>
+            All Payments
+          </h1>
+          <p className="text-gray-600 mt-1 ml-1 text-sm sm:text-base">
+            Total Transactions:{' '}
+            <span className="font-semibold text-gray-800">
+              {allPayments?.data?.length || 0}
+            </span>
+          </p>
         </div>
 
-        {/* Table Section */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+        {/* ── DESKTOP TABLE (md+) ── */}
+        <div className="hidden md:block bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Client Email
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Freelancer Email
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Transaction ID
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Final Budget
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Title
-                  </th>
+                  {[
+                    'Client Email',
+                    'Freelancer Email',
+                    'Transaction ID',
+                    'Final Budget',
+                    'Title',
+                  ].map(col => (
+                    <th
+                      key={col}
+                      className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                    >
+                      {col}
+                    </th>
+                  ))}
                 </tr>
               </thead>
-
               <tbody className="divide-y divide-gray-200">
                 {allPayments?.data?.map((payment, index) => (
                   <tr
@@ -71,7 +67,7 @@ const Page = async () => {
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 flex items-center justify-center text-white text-xs font-bold">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 flex items-center justify-center text-white text-xs font-bold shrink-0">
                           {payment.clientEmail.charAt(0).toUpperCase()}
                         </div>
                         <span className="text-sm text-gray-700">
@@ -81,7 +77,7 @@ const Page = async () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-teal-400 flex items-center justify-center text-white text-xs font-bold">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-teal-400 flex items-center justify-center text-white text-xs font-bold shrink-0">
                           {payment.freelancerEmail.charAt(0).toUpperCase()}
                         </div>
                         <span className="text-sm text-gray-700">
@@ -110,6 +106,73 @@ const Page = async () => {
             </table>
           </div>
         </div>
+
+        {/* ── MOBILE CARDS (below md) ── */}
+        <div className="md:hidden space-y-4">
+          {allPayments?.data?.map(payment => (
+            <div
+              key={payment._id}
+              className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 space-y-4"
+            >
+              {/* Title + budget row */}
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-bold text-gray-900 text-base">
+                  {payment.title}
+                </h3>
+                <span className="text-sm font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full shrink-0">
+                  ${payment.finalBudget}
+                </span>
+              </div>
+
+              {/* Client */}
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                  {payment.clientEmail.charAt(0).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+                    Client
+                  </p>
+                  <p className="text-sm text-gray-700 truncate">
+                    {payment.clientEmail}
+                  </p>
+                </div>
+              </div>
+
+              {/* Freelancer */}
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-teal-400 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                  {payment.freelancerEmail.charAt(0).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+                    Freelancer
+                  </p>
+                  <p className="text-sm text-gray-700 truncate">
+                    {payment.freelancerEmail}
+                  </p>
+                </div>
+              </div>
+
+              {/* Transaction ID */}
+              <div className="bg-gray-50 rounded-xl px-4 py-2.5">
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">
+                  Transaction ID
+                </p>
+                <p className="text-xs font-mono text-gray-600 break-all">
+                  {payment.transactionId}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Empty state */}
+        {(!allPayments?.data || allPayments.data.length === 0) && (
+          <div className="bg-white rounded-2xl p-16 text-center shadow-sm border border-gray-100">
+            <p className="text-gray-400 text-sm">No payments found.</p>
+          </div>
+        )}
       </div>
     </div>
   );

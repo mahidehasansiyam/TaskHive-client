@@ -55,7 +55,7 @@ const PaymentPage = ({ proposal }) => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-3xl mx-auto px-6 py-8">
+      <div className="max-w-3xl mx-auto p-1 md:px-6 py-8">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           {/* Header */}
           <div className="px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">

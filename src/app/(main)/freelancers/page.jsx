@@ -39,7 +39,7 @@ const Freelancers = () => {
   
 
   return (
-    <div className="max-w-6xl mx-auto px-8 py-12  min-h-screen font-sans">
+    <div className="max-w-6xl mx-auto px-1 md:px-8 py-12  min-h-screen font-sans">
       <div className="mb-10">
         <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
           Browse Freelancers
