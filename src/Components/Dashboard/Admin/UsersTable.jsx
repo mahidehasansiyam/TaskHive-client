@@ -80,7 +80,7 @@ const UsersTable = ({ users = [] }) => {
   return (
     <div className="space-y-5">
       {/* ── Toolbar ── */}
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-white p-1 rounded-2xl border border-slate-100 shadow-sm">
         {/* Search */}
         <div className="relative flex items-center w-full sm:max-w-sm">
           <div className="absolute left-4 pointer-events-none">

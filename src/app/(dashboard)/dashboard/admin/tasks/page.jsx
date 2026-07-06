@@ -16,7 +16,7 @@ const Tasks = async () => {
   const allTasks = await getAllTasks();
 
   return (
-    <div className="p-4 sm:p-8 max-w-7xl mx-auto bg-gray-50/50 min-h-screen">
+    <div className="p-1 sm:p-8 max-w-7xl mx-auto bg-gray-50/50 min-h-screen">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
