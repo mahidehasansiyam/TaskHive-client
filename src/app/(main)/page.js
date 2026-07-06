@@ -4,6 +4,7 @@ import Features from '../../Components/HomePage/Feature';
 import GetStart from '../../Components/HomePage/GetStart';
 import HowItWorks from '../../Components/HomePage/HowItWorks';
 import Stats from '../../Components/HomePage/Stats';
+import { DashboardSidebar } from '@/Components/Dashboard/DashboardSidebar';
 
 export default function Home() {
   return (

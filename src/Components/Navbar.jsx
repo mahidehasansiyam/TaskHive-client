@@ -120,7 +120,7 @@ export default function Navbar() {
         <div className="md:hidden">
           <Button
             onClick={() => setIsOpen(!isOpen)}
-            className="bg-transparent min-w-0"
+            className="bg-transparent min-w-0 text-black"
           >
             ☰
           </Button>
