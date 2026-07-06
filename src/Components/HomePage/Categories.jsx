@@ -7,7 +7,7 @@ export default function Categories() {
   const categories = [
     {
       label: 'Design',
-      href: '/browse-tasks?category=design',
+      href: '#',
       bgColor: 'bg-[#f5ebff]',
       borderColor: 'border-[#ebd6ff]',
       textColor: 'text-[#b966ff]',
@@ -29,7 +29,7 @@ export default function Categories() {
     },
     {
       label: 'Writing',
-      href: '/browse-tasks?category=writing',
+      href: '#',
       bgColor: 'bg-[#e6f0ff]',
       borderColor: 'border-[#cce0ff]',
       textColor: 'text-[#3b82f6]',
@@ -51,7 +51,7 @@ export default function Categories() {
     },
     {
       label: 'Development',
-      href: '/browse-tasks?category=development',
+      href: '#',
       bgColor: 'bg-[#fdf2e2]',
       borderColor: 'border-[#fbe3c3]',
       textColor: 'text-[#f59e0b]',
@@ -73,7 +73,7 @@ export default function Categories() {
     },
     {
       label: 'Marketing',
-      href: '/browse-tasks?category=marketing',
+      href: '#',
       bgColor: 'bg-[#e6f7f0]',
       borderColor: 'border-[#ccf0e1]',
       textColor: 'text-[#10b981]',
@@ -95,7 +95,7 @@ export default function Categories() {
     },
     {
       label: 'Other',
-      href: '/browse-tasks?category=other',
+      href: '#',
       bgColor: 'bg-[#e1f5fa]',
       borderColor: 'border-[#cbebf2]',
       textColor: 'text-[#06b6d4]',
