@@ -1,13 +1,28 @@
-'use client';
 
+
+import { getAllPayments } from '@/lib/api/payment';
+import { getAllTasks } from '@/lib/api/tasks';
+import { getAllUsers } from '@/lib/api/user';
 import React from 'react';
 
-export default function Stats({ data }) {
+export default async function Stats({ data }) {
+
+  const user = await getAllUsers();
+  const tasks = await getAllTasks();
+  const freelancers = user.filter(user => user.role === 'freelancer');
+  const clients = user.filter(user => user.role === 'client');
+  const payment = await getAllPayments()
+  const payout = payment.data.reduce(
+    (total, item) => total + Number(item.finalBudget || 0),
+    0,
+  );
+
   // Fallback defaults matching the mockup values in image_89ea49.png
   const stats = data || [
-    { value: '2+', label: 'Tasks Posted' },
-    { value: '6+', label: 'Users' },
-    { value: '$90', label: 'Total Payout' },
+    { value: `${tasks.length}`, label: 'Tasks Posted' },
+    { value: `${clients.length}`, label: 'Clients' },
+    { value: `${freelancers.length}`, label: 'Freelancers' },
+    { value: `$${payout}`, label: 'Total Payout' },
   ];
 
   return (
