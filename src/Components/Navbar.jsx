@@ -11,16 +11,21 @@ import { CiGrid42 } from 'react-icons/ci';
 import { CircleLoader } from 'react-spinners';
 import { FaBagShopping } from 'react-icons/fa6';
 
-export default function Navbar() {
+export default function Navbar({ initialSession }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
 
-  const dashboardRoute = session?.user?.role
-    ? `/dashboard/${session.user.role}`
-    : '/dashboard/client';
-
+  
+  const activeSession = session ?? initialSession;
+  
+  
+  const dashboardRoute = activeSession?.user?.role
+  ? `/dashboard/${activeSession.user.role}`
+  : '/dashboard/client';
+  
+  
   useEffect(() => {
     if (session?.user?.role) {
       router.prefetch(dashboardRoute);

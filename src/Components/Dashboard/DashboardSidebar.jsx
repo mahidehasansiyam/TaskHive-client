@@ -1,4 +1,4 @@
-import { getUserSession } from '@/lib/core/session';
+
 import { Bars } from '@gravity-ui/icons';
 import { Button, Drawer } from '@heroui/react';
 import Link from 'next/link';
@@ -19,8 +19,8 @@ import {
 
 import DashboardLogout from './DashboardLogout';
 
-export async function DashboardSidebar() {
-  const user = await getUserSession();
+export  function DashboardSidebar({user}) {
+  
   const userRole = user?.role || 'client';
 
   const clientNavItems = [
