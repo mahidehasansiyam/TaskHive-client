@@ -12,7 +12,7 @@ export const getAllTasksByClientEmail = async (email) => {
 };
 
 
-// GET open tasks
+// GET open tasks with pagination 
 export const getOpenTasks = async (queryString) => {
   return serverFetch(`/open/tasks?${queryString}`);
 };
