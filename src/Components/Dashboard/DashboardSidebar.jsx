@@ -28,7 +28,7 @@ export  function DashboardSidebar({user}) {
       icon: FaBorderAll,
       href: '/dashboard/client',
       label: 'Overview',
-      isActive: true,
+      // isActive: true,
     },
     {
       icon: FaListCheck,
@@ -62,7 +62,7 @@ export  function DashboardSidebar({user}) {
       icon: FaBorderAll,
       href: '/dashboard/freelancer',
       label: 'Overview',
-      isActive: true,
+      // isActive: true,
     },
     {
       icon: FaMagnifyingGlass,
@@ -96,7 +96,7 @@ export  function DashboardSidebar({user}) {
       icon: FaBorderAll,
       href: '/dashboard/admin',
       label: 'Overview',
-      isActive: true,
+      // isActive: true,
     },
     {
       icon: FaUsers,
