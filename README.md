@@ -1,12 +1,12 @@
-# TaskHive Client
+# 🐝 TaskHive Client
 
-Frontend for the TaskHive freelance marketplace platform. Built with Next.js 16 and React 19.
+> Frontend for the TaskHive freelance marketplace platform. Built with Next.js 16 and React 19.
 
-## Purpose
+## 🎯 Purpose
 
 TaskHive connects clients who need tasks done with freelancers who can complete them. The client provides a full-featured web interface for browsing tasks, submitting proposals, managing projects, processing payments, and administering the platform.
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Framework:** Next.js 16 (canary, breaking changes — see `AGENTS.md`)
 - **UI Library:** React 19
@@ -18,31 +18,50 @@ TaskHive connects clients who need tasks done with freelancers who can complete 
 - **Database:** MongoDB 7 (via better-auth adapter and raw connection)
 - **Linting:** ESLint with `eslint-config-next/core-web-vitals`
 
-## Getting Started
+## 🚀 Getting Started
+
+First, install the dependencies:
 
 ```bash
 npm install
+```
+
+Then, run the development server:
+
+```bash
 npm run dev
 ```
 
-Client runs on `http://localhost:3000`.
+The client will be running on `http://localhost:3000`.
 
-> The server must also be running on `http://localhost:9000` (see `../taskhive-server/`).
+> **Note:** The backend server must also be running on `http://localhost:9000` (see `../taskhive-server/`).
 
-## Features
+## 🔐 Key Workflows
+
+### 1. Authentication Flow
+Handled completely by **better-auth** interacting directly with MongoDB. Sessions are verified in the frontend via Next.js middleware and server-side utilities.
+
+### 2. Job Hiring Flow
+1. **Client** creates a Task → *Status: Open*
+2. **Freelancers** submit Proposals to the Task → *Status: Pending*
+3. **Client** accepts a Proposal → *Proposal status: Accepted* (Task status: In Progress)
+4. **Freelancer** submits the work (Project URL) → *Task status: Completed*
+
+### 3. Payment Flow
+Initiated on the client, processed through Next.js API route (`/api/checkout_sessions`) communicating with Stripe, and recorded in the Express backend (`/payments`).
+
+## ✨ Features
 
 ### Route Groups
-
 - `(main)/` — Public pages with Navbar and Footer (landing, tasks, freelancers, auth, payment success)
 - `(dashboard)/` — Authenticated pages with DashboardSidebar (role-specific dashboards)
 
-### Auth
-
+### Authentication
 - Sign up / sign in with email/password or Google
 - Role-based access: `client`, `freelancer`, `admin`
 - Session helpers: `getUserSession()`, `requireRole(role)` in `@/lib/core/session.js`
 
-### Pages
+### 🗺️ Pages Overview
 
 | Route | Access | Description |
 |---|---|---|
@@ -70,15 +89,12 @@ Client runs on `http://localhost:3000`.
 | `/dashboard/admin/payments` | Admin | View all payments |
 | `/payment/success` | Public | Stripe checkout success page |
 
-### Server API Integration
+### 🔌 API & Integrations
 
-API calls use `serverFetch()` and `serverMutation()` from `@/lib/core/server.js`, which target `NEXT_PUBLIC_SERVER_URL` (default: `http://localhost:9000`).
+- **Server API Integration:** API calls use `serverFetch()` and `serverMutation()` from `@/lib/core/server.js`, which target `NEXT_PUBLIC_SERVER_URL` (default: `http://localhost:9000`).
+- **Stripe Payments:** Checkout session creation at `app/api/checkout_sessions/route.js`. Uses Stripe Checkout with redirect to `/payment/success`.
 
-### Stripe Payments
-
-Checkout session creation at `app/api/checkout_sessions/route.js`. Uses Stripe Checkout with redirect to `/payment/success`.
-
-## Environment Variables
+## ⚙️ Environment Variables
 
 All variables are in committed `.env` (development only — rotate for production).
 
@@ -94,7 +110,7 @@ All variables are in committed `.env` (development only — rotate for productio
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
 | `STRIPE_SECRET_KEY` | Stripe secret key |
 
-## Scripts
+## 📜 Scripts
 
 | Command | Description |
 |---|---|
@@ -103,6 +119,6 @@ All variables are in committed `.env` (development only — rotate for productio
 | `npm run lint` | Run ESLint |
 | `npm start` | Start production server |
 
-## Deployment
+## 🌐 Deployment
 
 Deployed on Vercel.
