@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function Features() {
   const features = [
@@ -144,27 +145,52 @@ export default function Features() {
   ];
 
   return (
-    <section className="w-full  py-24 px-6 relative overflow-hidden">
+    <section className="w-full py-24 px-6 relative overflow-hidden bg-white dark:bg-gray-900 transition-colors duration-300">
       <div className="w-full max-w-[1440px] mx-auto flex flex-col items-center">
         {/* Top Header Label */}
-        <span className="text-[#f59e0b] font-extrabold text-[13px] tracking-[0.15em] uppercase mb-4">
+        <motion.span 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-[#f59e0b] font-extrabold text-[13px] tracking-[0.15em] uppercase mb-4"
+        >
           Features
-        </span>
+        </motion.span>
 
         {/* Section Heading with Custom Gradient Accent */}
-        <h2 className="text-gray-900 font-extrabold text-4xl sm:text-[44px] tracking-tight mb-20 text-center leading-tight">
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-gray-900 dark:text-white font-extrabold text-4xl sm:text-[44px] tracking-tight mb-20 text-center leading-tight"
+        >
           Everything you need to{' '}
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#f59e0b] to-[#ea580c]">
             succeed
           </span>
-        </h2>
+        </motion.h2>
 
         {/* 3x2 Grid for Desktop, Single Column for Mobile */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl">
+        <motion.div 
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15
+              }
+            }
+          }}
+          className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl"
+        >
           {features.map((feature, index) => (
-            <div
+            <motion.div
+              variants={{ hidden: { opacity: 0, scale: 0.95, y: 20 }, show: { opacity: 1, scale: 1, y: 0 } }}
               key={index}
-              className="bg-[#fbfbfb] border border-gray-100/70 p-8 rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_rgba(245,158,11,0.05)] transition-all duration-300 flex flex-col items-start text-left group hover:-translate-y-1"
+              className="bg-[#fbfbfb] dark:bg-gray-800/60 backdrop-blur-sm border border-gray-100/70 dark:border-gray-700/60 p-8 rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_rgba(245,158,11,0.1)] transition-all duration-300 flex flex-col items-start text-left group hover:-translate-y-2"
             >
               {/* Feature Icon Container with Soft Border Pill Framing */}
               <div
@@ -174,17 +200,17 @@ export default function Features() {
               </div>
 
               {/* Feature Title */}
-              <h3 className="text-gray-900 font-bold text-[18px] tracking-tight mb-3">
+              <h3 className="text-gray-900 dark:text-white font-bold text-[18px] tracking-tight mb-3">
                 {feature.title}
               </h3>
 
               {/* Feature Description Paragraph */}
-              <p className="text-gray-400 text-[14px] leading-relaxed font-medium">
+              <p className="text-gray-400 dark:text-gray-400 text-[14px] leading-relaxed font-medium">
                 {feature.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

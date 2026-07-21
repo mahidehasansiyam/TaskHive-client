@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function Categories() {
   const categories = [
@@ -118,38 +119,66 @@ export default function Categories() {
   ];
 
   return (
-    <section className="w-full  py-20 px-6 relative overflow-hidden">
+    <section className="w-full py-20 px-6 relative overflow-hidden bg-white dark:bg-gray-900">
       <div className="w-full max-w-[1440px] mx-auto flex flex-col items-center">
         {/* Top Header Label */}
-        <span className="text-[#f59e0b] font-extrabold text-[13px] tracking-[0.15em] uppercase mb-4">
+        <motion.span 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-[#f59e0b] font-extrabold text-[13px] tracking-[0.15em] uppercase mb-4"
+        >
           Categories
-        </span>
+        </motion.span>
 
         {/* Section Heading */}
-        <h2 className="text-gray-900 font-extrabold text-4xl sm:text-[44px] tracking-tight mb-16 text-center">
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-gray-900 dark:text-white font-extrabold text-4xl sm:text-[44px] tracking-tight mb-16 text-center"
+        >
           Popular Categories
-        </h2>
+        </motion.h2>
 
         {/* Responsive Grid System */}
-        <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5 max-w-6xl">
+        <motion.div 
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1
+              }
+            }
+          }}
+          className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5 max-w-6xl"
+        >
           {categories.map((category, index) => (
-            <Link
-              key={index}
-              href={category.href}
-              className={`flex flex-col items-center justify-center py-10 px-4 rounded-[22px] border ${category.bgColor} ${category.borderColor} ${category.textColor} transition-all duration-200 hover:scale-[1.03] hover:shadow-md select-none no-underline text-center`}
-            >
-              {/* Graphic Icon Wrapper */}
-              <div className="mb-4 flex items-center justify-center">
-                {category.icon}
-              </div>
+            <motion.div key={index} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
+              <Link
+                href={category.href}
+                className={`group flex flex-col items-center justify-center py-10 px-4 rounded-[22px] border ${category.bgColor} ${category.borderColor} ${category.textColor} dark:bg-gray-800/40 dark:border-gray-700/50 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(245,158,11,0.15)] select-none no-underline text-center relative overflow-hidden`}
+              >
+                {/* Glassmorphism shine effect on hover */}
+                <div className="absolute inset-0 bg-white/40 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                {/* Graphic Icon Wrapper */}
+                <div className="mb-4 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                  {category.icon}
+                </div>
 
-              {/* Title Identity */}
-              <span className="font-bold text-[16px] tracking-tight">
-                {category.label}
-              </span>
-            </Link>
+                {/* Title Identity */}
+                <span className="font-bold text-[16px] tracking-tight relative z-10 dark:text-gray-200">
+                  {category.label}
+                </span>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
